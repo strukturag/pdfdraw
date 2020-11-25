@@ -1,0 +1,30 @@
+name: Lint
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    container: nextcloudci/eslint:eslint-1
+
+    name: eslint
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Lint
+        run: ./run-eslint.sh
+
+  stylelint:
+    runs-on: ubuntu-latest
+    container: nextcloudci/stylelint:stylelint-1
+
+    name: stylelint
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Lint
+        run: ./run-stylelint.sh
