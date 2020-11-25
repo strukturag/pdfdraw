@@ -1,4 +1,5 @@
 /pdfjs-*.zip
 3rdparty/pdfjs/
+build/
 server/config.js
 server/package-lock.json
