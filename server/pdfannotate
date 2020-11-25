@@ -1,0 +1,63 @@
+#!/usr/bin/python -u
+
+##
+## @copyright Copyright (C) 2018, struktur AG
+##
+## @author Joachim Bauch <mail@joachim-bauch.de>
+##
+## @license AGPL-3.0
+##
+## This program is free software: you can redistribute it and/or modify
+## it under the terms of the GNU Affero General Public License as
+## published by the Free Software Foundation, either version 3 of the
+## License, or (at your option) any later version.
+##
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU Affero General Public License for more details.
+##
+## You should have received a copy of the GNU Affero General Public License
+## along with this program.  If not, see <https://www.gnu.org/licenses/>.
+##
+
+import argparse
+from cStringIO import StringIO
+import json
+import sys
+
+try:
+  from annotate_pdfparser import annotate
+except ImportError:
+  from annotate_pypdf import annotate
+
+def main():
+  parser = argparse.ArgumentParser(description='Add text annotations to PDF.')
+  parser.add_argument('input', metavar='INPUT',
+                      help='Input filename. Use "-" for stdin.')
+  parser.add_argument('output', metavar='OUTPUT',
+                      help='Output filename. Use "-" for stdout.')
+  parser.add_argument('--text', dest='text',
+                      help='JSON filename describing the text annotations.')
+  args = parser.parse_args()
+
+  try:
+    annotations = json.loads(file(args.text, 'rb').read())
+  except Exception, e:
+    parser.error('Could not open/read text annotations: %s' % (e))
+
+  if args.input == '-':
+    fp_in = StringIO(sys.stdin.read())
+  else:
+    fp_in = file(args.input, 'rb')
+
+  pdf_data = annotate(fp_in, annotations)
+
+  if args.output == '-':
+    sys.stdout.write(pdf_data)
+  else:
+    with file(args.output, 'wb') as fp:
+      fp.write(pdf_data)
+
+if __name__ == '__main__':
+  main()

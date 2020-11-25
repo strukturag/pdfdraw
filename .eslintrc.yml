@@ -1,0 +1,43 @@
+root: true
+
+extends:
+  - eslint:recommended
+
+env:
+  es6: true
+  browser: true
+  amd: true
+
+globals:
+  $: false
+  OC: false
+  OCA: false
+  t: false
+  n: false
+  _: false
+  paper: false
+  io: false
+  iro: false
+  iroTransparencyPlugin: false
+  PDFViewerApplication: false
+  PDFViewerApplicationOptions: false
+  pdfjsLib: false
+  console: false
+  require: false
+  Buffer: false
+
+rules:
+  curly: error
+  eqeqeq: ["error", "smart"]
+  guard-for-in: error
+  indent: ["error", 2, {"SwitchCase": 1}]
+  no-console: off
+  no-fallthrough: error
+  no-mixed-spaces-and-tabs: error
+  no-multiple-empty-lines: ["error", {"max": 1, "maxEOF": 1}]
+  no-unused-vars: off
+  no-use-before-define: error
+  padded-blocks: ["error", "never"]
+  semi: ["error", "always"]
+  space-before-function-paren: ["error", "never"]
+  space-before-blocks: "error"

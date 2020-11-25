@@ -1,0 +1,5 @@
+*.pyc
+
+node_modules/
+pdfparser
+PyPDF2

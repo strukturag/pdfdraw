@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<info>
+	<id>pdfdraw</id>
+	<name>PDF annotations</name>
+	<summary>Annotate PDF documents</summary>
+	<version>0.0.4</version>
+	<licence>agpl</licence>
+	<author>Joachim Bauch</author>
+	<default_enable/>
+	<category>files</category>
+	<category>office</category>
+	<dependencies>
+		<nextcloud min-version="13" max-version="20" />
+	</dependencies>
+	<settings>
+		<admin>OCA\Pdfdraw\Settings\Admin\Backend</admin>
+		<admin-section>OCA\Pdfdraw\Settings\Admin\Section</admin-section>
+	</settings>
+</info>

@@ -1,0 +1,5 @@
+3rdparty/*
+js/libs/*
+server/node_modules/*
+
+server/config.js

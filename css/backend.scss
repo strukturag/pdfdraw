@@ -1,0 +1,30 @@
+.pdfdraw.section {
+  input {
+    width: 300px;
+    vertical-align: middle;
+  }
+
+  .icon-checkmark-color {
+    display: inline-block;
+    width: 44px;
+    height: 44px;
+    vertical-align: middle;
+  }
+
+  .icon-checkmark-color.hidden {
+    display: none;
+  }
+
+  .error {
+    border-color: $color-error;
+  }
+
+  label {
+    min-width: 200px;
+    display: inline-block;
+  }
+
+  .shared-secret {
+    margin-top: 20px;
+  }
+}

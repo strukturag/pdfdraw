@@ -1,0 +1,15 @@
+{
+  "name": "pdfdraw",
+  "version": "0.0.1",
+  "license": "AGPL-3.0",
+  "description": "Sample server for pdfdraw",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/strukturag/pdfdraw.git"
+  },
+  "main": "server.js",
+  "dependencies": {
+    "jsonwebtoken": "^8.4.0",
+    "socket.io": "^2.1.1"
+  }
+}

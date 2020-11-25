@@ -1,0 +1,301 @@
+#content.app-pdfdraw {
+  min-height: calc(100% - 50px);
+  width: 100%;
+}
+
+#app > iframe {
+  position: absolute;
+  vertical-align: top;
+}
+
+.directDownload #annotateFile {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90%;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.textLayer {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+     -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome and Opera */
+}
+.cursor {
+  border: 1px solid #ccc;
+  padding: 4px;
+  background-color: white;
+  z-index: 100;
+}
+#presentationMode, #openFile, #print, #download, #viewBookmark, #secondaryToolbarToggle, .verticalToolbarSeparator {
+  display: none !important;
+}
+.noneMode::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-size: 16px 16px;
+  background-image: url(../img/icon-notool.svg);
+  background-repeat: no-repeat;
+}
+.selectMode::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-size: 16px 16px;
+  background-image: url(../img/icon-select.svg);
+  background-repeat: no-repeat;
+}
+.pointerMode::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-size: 16px 16px;
+  background-image: url(../img/icon-pointer.svg);
+  background-repeat: no-repeat;
+}
+.freehandMode::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-size: 16px 16px;
+  background-image: url(../img/icon-freehand.svg);
+  background-repeat: no-repeat;
+}
+.rectangleMode::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-size: 16px 16px;
+  background-image: url(../img/icon-rectangle.svg);
+  background-repeat: no-repeat;
+}
+
+.ellipseMode::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-size: 16px 16px;
+  background-image: url(../img/icon-ellipse.svg);
+  background-repeat: no-repeat;
+}
+.lineMode::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-size: 16px 16px;
+  background-image: url(../img/icon-line.svg);
+  background-repeat: no-repeat;
+}
+.toolbarButton.download::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-size: 16px 16px;
+  background-image: url(../img/icon-download.svg);
+  background-repeat: no-repeat;
+}
+
+.secondaryToolbar.drawMenuToolbar {
+  right: 105px !important;
+}
+
+.secondaryToolbar.drawMenuToolbar {
+  line-height: 0 !important;
+}
+.secondaryToolbar.drawMenuToolbar .toolbarButton::before {
+  position: relative !important;
+  top: 1px !important;
+  left: 1px !important;
+}
+.secondaryToolbar.drawMenuToolbar .toolbarButton {
+  margin: 0 !important;
+}
+
+#colorPicker {
+  display: none;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.5);
+  left: 50%;
+  top: 50%;
+  z-index: 10000;
+  padding: 20px;
+  border-radius: 20px;
+  margin-left: -160px;
+  margin-top: -160px;
+}
+
+.toolbarButton.close::before {
+  display: block;
+  content: ' ';
+  background-image: url(../img/toolbarButton-secondaryToolbarClose.svg);
+  background-size: 16px 16px;
+  height: 16px;
+  width: 16px;
+}
+
+#drawModeToolbar .dropdown {
+  background: url(../img/icon-dropdown.svg);
+  width: 16px;
+  height: 16px;
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  margin-top: -2px;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 2), screen and (min-resolution: 2dppx) {
+  #noneMode::before,
+  #selectMode::before,
+  #pointerMode::before,
+  #freehandMode::before,
+  #rectangleMode::before,
+  #ellipseMode::before,
+  #lineMode::before,
+  #drawModeToolbar::before,
+  .toolbarButton.download::before {
+      background-size: 32px 32px !important;
+      height: 32px !important;
+      width: 32px !important;
+  }
+
+  .secondaryToolbar.drawMenuToolbar .toolbarButton::before {
+      top: -7px !important;
+      left: -7px !important;
+  }
+
+  #drawModeToolbarButtonContainer {
+      max-height: 26px;
+  }
+}
+
+@media screen and (min-resolution: 2dppx) {
+  .toolbarButton.close::before {
+    background-size: 32px 32px !important;
+    height: 32px !important;
+    width: 32px !important;
+  }
+}
+
+.userlist {
+  display: none;
+  position: absolute;
+  left: 0;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+  z-index: 9999;
+  top: 32px;
+  padding: 10px;
+  background-color: rgba(1, 1, 1, 0.3);
+  border-radius: 8px;
+  color: white;
+}
+
+.sidebarOpen .userlist {
+  left: 200px;
+  left: var(--sidebar-width);
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+}
+
+#connectionError {
+  display: none;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.7);
+  left: 50%;
+  top: 50%;
+  z-index: 100000;
+  padding: 20px;
+  border-radius: 20px;
+  margin-left: -200px;
+  width: 400px;
+  color: rgb(255, 38, 0);
+  font-weight: bold;
+  text-align: center;
+}
+
+#connectingMessage {
+  display: none;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.7);
+  left: 50%;
+  top: 50%;
+  z-index: 100000;
+  padding: 20px;
+  border-radius: 20px;
+  margin-left: -200px;
+  width: 400px;
+  color: white;
+  text-align: center;
+}
+
+#downloadInProgress {
+  display: none;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.7);
+  left: 50%;
+  top: 50%;
+  z-index: 100000;
+  padding: 20px;
+  border-radius: 20px;
+  margin-left: -200px;
+  width: 400px;
+  color: white;
+  text-align: center;
+}
+
+#downloadFailed {
+  display: none;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.7);
+  left: 50%;
+  top: 50%;
+  z-index: 100000;
+  padding: 20px;
+  border-radius: 20px;
+  margin-left: -200px;
+  width: 400px;
+  color: rgb(255, 38, 0);
+  font-weight: bold;
+  text-align: center;
+}
+
+.readonly .hiddenReadonly {
+  display: none !important;
+}
+
+.page.hiddenPage {
+  margin: 0;
+  border: 0;
+  height: 0 !important;
+}
+
+.page.hiddenPage canvas {
+  display: none;
+}
+
+.page.hiddenPage div {
+  display: none;
+}
+
+.toolbarButton.selected {
+  background-color: hsla(0,0%,0%,.12);
+  background-image: linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-clip: padding-box;
+  border: 1px solid hsla(0,0%,0%,.35);
+  border-color: hsla(0,0%,0%,.32) hsla(0,0%,0%,.38) hsla(0,0%,0%,.42);
+  box-shadow: 0 1px 0 hsla(0,0%,100%,.05) inset, 0 0 1px hsla(0,0%,100%,.15) inset, 0 1px 0 hsla(0,0%,100%,.05);
+}
