@@ -10,7 +10,7 @@ Annotate any PDF document collaboratively inside Nextcloud. Select "Annotate" fr
 Requires a separate nodejs server running on the backend to distribute the signaling messages between clients.
 The server is available on [GitHub](https://github.com/strukturag/pdfdraw/tree/master/server).
 	]]></description>
-	<version>0.1.0</version>
+	<version>0.1.1</version>
 	<licence>agpl</licence>
 	<author>Joachim Bauch</author>
 	<category>files</category>
