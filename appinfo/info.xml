@@ -3,12 +3,15 @@
 	<id>pdfdraw</id>
 	<name>PDF annotations</name>
 	<summary>Annotate PDF documents</summary>
-	<version>0.0.4</version>
+	<description>PDF annotations for Nextcloud</description>
+	<version>0.1.0</version>
 	<licence>agpl</licence>
 	<author>Joachim Bauch</author>
-	<default_enable/>
 	<category>files</category>
 	<category>office</category>
+	<website>https://github.com/strukturag/pdfdraw</website>
+	<bugs>https://github.com/strukturag/pdfdraw/issues</bugs>
+	<repository>https://github.com/strukturag/pdfdraw.git</repository>
 	<dependencies>
 		<nextcloud min-version="13" max-version="20" />
 	</dependencies>
