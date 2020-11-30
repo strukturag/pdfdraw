@@ -2,8 +2,14 @@
 <info>
 	<id>pdfdraw</id>
 	<name>PDF annotations</name>
-	<summary>Annotate PDF documents</summary>
-	<description>PDF annotations for Nextcloud</description>
+	<summary><![CDATA[Annotate PDF documents]]></summary>
+	<description><![CDATA[PDF annotations for Nextcloud
+
+Annotate any PDF document collaboratively inside Nextcloud. Select "Annotate" from the context menu of PDF files to open the annotation mode.
+
+Requires a separate nodejs server running on the backend to distribute the signaling messages between clients.
+The server is available on [GitHub](https://github.com/strukturag/pdfdraw/tree/master/server).
+	]]></description>
 	<version>0.1.0</version>
 	<licence>agpl</licence>
 	<author>Joachim Bauch</author>
