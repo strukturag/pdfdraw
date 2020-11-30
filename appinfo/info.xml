@@ -18,6 +18,10 @@ The server is available on [GitHub](https://github.com/strukturag/pdfdraw/tree/m
 	<website>https://github.com/strukturag/pdfdraw</website>
 	<bugs>https://github.com/strukturag/pdfdraw/issues</bugs>
 	<repository>https://github.com/strukturag/pdfdraw.git</repository>
+
+	<screenshot>https://raw.githubusercontent.com/strukturag/pdfdraw/master/screenshots/pdf-with-annotations.png</screenshot>
+	<screenshot>https://raw.githubusercontent.com/strukturag/pdfdraw/master/screenshots/colorpicker.png</screenshot>
+
 	<dependencies>
 		<nextcloud min-version="13" max-version="20" />
 	</dependencies>
