@@ -29,7 +29,7 @@ clean:
 appstore: clean build
 	mkdir -p $(sign_dir)
 	rsync -a \
-	--exclude=build \
+	--exclude=/build \
 	--exclude=.eslintignore \
 	--exclude=.eslintrc.yml \
 	--exclude=.git \
