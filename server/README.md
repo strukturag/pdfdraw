@@ -63,3 +63,27 @@ fields:
 - `author` (string): Optional author name to add to the annotation metadata.
 - `modified` (number): Optional timestamp (seconds since the epoch, in UTC)
   when the annotation was last modified.
+
+# run pdfdraw server in a docker container using docker-compose.
+
+all settings are exposed into enviroment variables. That means you are able to config the backend server in [docker-compose.yml](docker-compose.yml) yaml file by editing the corresponding enviroment variables.
+
+Based on your docker setup you still need to edit a few lines in the [docker-compose.yml](docker-compose.yml) file for networking. 
+
+For example by exposing ports:
+
+    ports:  
+      - "8080:8080"
+ 
+or join an existing network:
+
+    networks:  
+      default:
+        external:
+           name: my-pre-existing-network
+
+For more details read [Networking in Compose](https://docs.docker.com/compose/networking/)
+
+Than run docker compose.
+
+    docker-compose up -d
