@@ -166,6 +166,7 @@
   #ellipseMode::before,
   #lineMode::before,
   #drawModeToolbar::before,
+  #secondaryToolbarClose::before,
   .toolbarButton.download::before {
       background-size: 32px 32px !important;
       height: 32px !important;
