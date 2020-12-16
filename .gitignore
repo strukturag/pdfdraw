@@ -3,3 +3,4 @@
 build/
 server/config.js
 server/package-lock.json
+server/docker-compose.yml
