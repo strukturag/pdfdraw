@@ -1,0 +1,22 @@
+version: '2'
+services:
+  pdfdraw-server:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+
+    environment:
+      port: 8080
+      secret: 'the-shared-secret'
+      #allow_invalid_certificates: null
+      #use_auto_ecdh_curve: null
+      #cmd_pdftk: ''
+      #cmd_svg2pdf: ''
+
+    #ports:  
+    #- '8080:8080'
+
+#networks:  
+#  default:
+#    external:
+#      name: my-pre-existing-network

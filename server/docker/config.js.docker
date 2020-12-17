@@ -1,0 +1,24 @@
+var config = {};
+
+// The port the service should run on.
+config.port = process.env.port || 8080;
+
+// The shared secret for token validation. Must be the same value
+// as configured in the Nextcloud admin interface.
+config.secret = process.env.secret || 'the-shared-secret';
+
+// INSECURE! Allow any self-signed / expired certificates.
+// Only use this during development!
+config.allow_invalid_certificates = process.env.allow_invalid_certificates || false;
+
+// Required for newer versions of node / libssl.
+// See https://github.com/nodejs/node/issues/21513#issuecomment-399790415
+config.use_auto_ecdh_curve = process.env.use_auto_ecdh_curve || false;
+
+// Command to use when running pdftk. Defaults to 'pdftk' if not configured.
+config.cmd_pdftk = process.env.cmd_pdftk || '';
+
+// Command to use when running svg2pdf. Defaults to 'svg2pdf' if not configured.
+config.cmd_svg2pdf = process.env.cmd_svg2pdf || '';
+
+module.exports = config;
