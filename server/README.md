@@ -27,7 +27,7 @@ running the pdfdraw server.
 
 Install the node dependencies by running `npm install` in the `server` folder.
 
-Copy `server.conf.in` to `server.conf` and adjust to your requirements.
+Copy `config.js.in` to `config.js` and adjust to your requirements.
 
 
 ## Running
