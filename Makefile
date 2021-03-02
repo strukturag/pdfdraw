@@ -39,7 +39,6 @@ appstore: clean build
 	--exclude=Makefile \
 	--exclude=node_modules \
 	--exclude=pdfjs*.zip \
-	--exclude=package.json \
 	--exclude=run-*lint.sh \
 	--exclude=.stylelintrc \
 	$(project_dir)/ \
