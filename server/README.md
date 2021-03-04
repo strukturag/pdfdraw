@@ -5,7 +5,6 @@ This document describes the `pdfdraw` server API.
 ## Requirements
 
 - node
-- npm
 - Python2
 - [pdftk](https://www.pdflabs.com/tools/pdftk-server/)
 - [svg2pdf](https://pypi.org/project/svglib/)
