@@ -1,5 +1,3 @@
-PDFJS_VERSION=2.0.943
-
 app_name=pdfdraw
 
 project_dir=$(CURDIR)/../$(app_name)
@@ -10,20 +8,17 @@ sign_dir=$(build_dir)/sign
 package_name=$(app_name)
 cert_dir=$(HOME)/.nextcloud/certificates
 
-all: 3rdparty
+all: npm build
 
-3rdparty: pdfjs
+npm: package.json package-lock.json
+	npm install
 
-pdfjs-${PDFJS_VERSION}-dist.zip:
-	wget https://github.com/mozilla/pdf.js/releases/download/v${PDFJS_VERSION}/pdfjs-${PDFJS_VERSION}-dist.zip
-
-pdfjs: pdfjs-${PDFJS_VERSION}-dist.zip
-	mkdir -p 3rdparty/pdfjs
-	unzip -qo pdfjs-${PDFJS_VERSION}-dist.zip -d 3rdparty/pdfjs
-
-build: 3rdparty
+build: npm
+	npm run build
 
 clean:
+	rm -rf $(CURDIR)/3rdparty/pdfjs
+	rm -rf $(CURDIR)/js
 	rm -rf $(build_dir)
 
 appstore: clean build
@@ -38,9 +33,10 @@ appstore: clean build
 	--exclude=.gitmodules \
 	--exclude=Makefile \
 	--exclude=node_modules \
-	--exclude=pdfjs*.zip \
+	--exclude=src \
 	--exclude=run-*lint.sh \
 	--exclude=.stylelintrc \
+	--exclude=vendors*js \
 	$(project_dir)/ \
 	$(sign_dir)/$(app_name)
 	@if [ -f $(cert_dir)/$(app_name).key ]; then \

@@ -1,6 +1,7 @@
-/pdfjs-*.zip
+/node_modules
 3rdparty/pdfjs/
 build/
+js/
 server/config.js
 server/package-lock.json
 server/docker-compose.yml

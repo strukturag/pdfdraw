@@ -1,5 +1,7 @@
 3rdparty/*
-js/libs/*
+js/*
+node_modules/*
 server/node_modules/*
 
 server/config.js
+webpack.js
