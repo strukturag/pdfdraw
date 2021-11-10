@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 namespace OCA\Pdfdraw\Controller;
 
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use \Firebase\JWT\JWT;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataDownloadResponse;
@@ -174,7 +175,11 @@ class ApiController extends OCSController {
 						'data' => $query->createNamedParameter($data),
 					]
 				);
-			$query->execute();
+			try {
+				$query->execute();
+			} catch (UniqueConstraintViolationException $e) {
+				// Ignore, another request created the item.
+			}
 		}
 		return new DataResponse([]);
 	}
