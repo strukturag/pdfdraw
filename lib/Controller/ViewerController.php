@@ -52,6 +52,10 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 
 class ViewerController extends Controller {
 
+	const PDF_MIME_TYPES = [
+		'application/pdf',
+	];
+
 	/** @var string */
 	private $userId;
 
@@ -262,6 +266,18 @@ class ViewerController extends Controller {
 		return $fileUrl;
 	}
 
+	private function isValidPdfFile($file) {
+		$mime = $file->getMimeType();
+		if ($mime) {
+			$mime = strtolower($mime);
+		}
+		if (!in_array($mime, self::PDF_MIME_TYPES)) {
+			return $this->l10n->t('File %s is not a PDF file (%s)', [$file->getName(), $mime]);
+		}
+
+		return null;
+	}
+
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
@@ -277,6 +293,12 @@ class ViewerController extends Controller {
 		}
 
 		list($file, $error) = empty($token) ? $this->getFile($this->userId, $fileId) : $this->getFileByToken($fileId, $token);
+		if (isset($error)) {
+			$this->logger->error("index: " . $fileId . " " . $error, array("app" => $this->appName));
+			return ['error' => $error];
+		}
+
+		$error = $this->isValidPdfFile($file);
 		if (isset($error)) {
 			$this->logger->error("index: " . $fileId . " " . $error, array("app" => $this->appName));
 			return ['error' => $error];
@@ -324,6 +346,12 @@ class ViewerController extends Controller {
 	 */
 	public function viewer(string $fileId, $token = null) {
 		list($file, $error) = empty($token) ? $this->getFile($this->userId, $fileId) : $this->getFileByToken($fileId, $token);
+		if (isset($error)) {
+			$this->logger->error("viewer: " . $fileId . " " . $error, array("app" => $this->appName));
+			return ['error' => $error];
+		}
+
+		$error = $this->isValidPdfFile($file);
 		if (isset($error)) {
 			$this->logger->error("viewer: " . $fileId . " " . $error, array("app" => $this->appName));
 			return ['error' => $error];
