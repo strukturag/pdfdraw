@@ -9,19 +9,11 @@ env:
   amd: true
 
 globals:
-  $: false
   OC: false
   OCA: false
   t: false
   n: false
   _: false
-  paper: false
-  io: false
-  iro: false
-  iroTransparencyPlugin: false
-  PDFViewerApplication: false
-  PDFViewerApplicationOptions: false
-  pdfjsLib: false
   console: false
   require: false
   Buffer: false

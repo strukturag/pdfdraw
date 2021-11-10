@@ -27,7 +27,7 @@ Adobe CMap resources are covered by their own copyright but the same license:
 See https://github.com/adobe-type-tools/cmap-resources
 -->
 <html dir="ltr" mozdisallowselectionprint>
-  <head data-workersrc="<?php p($urlGenerator->linkTo('pdfdraw', '3rdparty/pdfjs/build/pdf.worker.js')) ?>?v=<?php p($version) ?>" data-cmapurl="<?php p($urlGenerator->linkTo('pdfdraw', '3rdparty/pdfjs/web/cmaps/')) ?>" data-socketurl="<?php p($_['server']) ?>" data-fileid="<?php p($_['fileId']) ?>" data-userid="<?php p($_['userId']) ?>" data-displayname="<?php p($_['displayName']) ?>" data-token="<?php p($_['token']) ?>" data-permissions="<?php p($_['permissions']) ?>">
+  <head data-workersrc="<?php p($urlGenerator->linkTo('pdfdraw', 'js/pdf.worker.js')) ?>?v=<?php p($version) ?>" data-cmapurl="<?php p($urlGenerator->linkTo('pdfdraw', '3rdparty/pdfjs/web/cmaps/')) ?>" data-socketurl="<?php p($_['server']) ?>" data-fileid="<?php p($_['fileId']) ?>" data-userid="<?php p($_['userId']) ?>" data-displayname="<?php p($_['displayName']) ?>" data-token="<?php p($_['token']) ?>" data-permissions="<?php p($_['permissions']) ?>">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="google" content="notranslate">
@@ -41,15 +41,9 @@ See https://github.com/adobe-type-tools/cmap-resources
     <!-- This snippet is used in production (included from viewer.html) -->
     <link rel="resource" type="application/l10n" href="<?php p($urlGenerator->linkTo('pdfdraw', '3rdparty/pdfjs/web/locale/locale.properties')) ?>?v=<?php p($version) ?>">
 
-    <script nonce="<?php p(\OC::$server->getContentSecurityPolicyNonceManager()->getNonce()) ?>" src="<?php p($urlGenerator->linkTo('pdfdraw', '3rdparty/pdfjs/build/pdf.js')) ?>?v=<?php p($version) ?>"></script>
+    <script nonce="<?php p(\OC::$server->getContentSecurityPolicyNonceManager()->getNonce()) ?>" src="<?php p($urlGenerator->linkTo('pdfdraw', 'js/pdf.js')) ?>?v=<?php p($version) ?>"></script>
+    <script nonce="<?php p(\OC::$server->getContentSecurityPolicyNonceManager()->getNonce()) ?>" src="<?php p($urlGenerator->linkTo('pdfdraw', 'js/pdf.viewer.js')) ?>?v=<?php p($version) ?>"></script>
 
-    <script nonce="<?php p(\OC::$server->getContentSecurityPolicyNonceManager()->getNonce()) ?>" src="<?php p($urlGenerator->linkTo('pdfdraw', '3rdparty/pdfjs/web/viewer.js')) ?>?v=<?php p($version) ?>"></script>
-
-    <script nonce="<?php p(\OC::$server->getContentSecurityPolicyNonceManager()->getNonce()) ?>" src="<?php p($urlGenerator->linkTo('pdfdraw', 'js/libs/jquery-3.3.1.min.js')) ?>?v=<?php p($version) ?>"></script>
-    <script nonce="<?php p(\OC::$server->getContentSecurityPolicyNonceManager()->getNonce()) ?>" src="<?php p($urlGenerator->linkTo('pdfdraw', 'js/libs/paper-0.11.8.min.js')) ?>?v=<?php p($version) ?>"></script>
-    <script nonce="<?php p(\OC::$server->getContentSecurityPolicyNonceManager()->getNonce()) ?>" src="<?php p($urlGenerator->linkTo('pdfdraw', 'js/libs/socket.io-2.1.1.min.js')) ?>?v=<?php p($version) ?>"></script>
-    <script nonce="<?php p(\OC::$server->getContentSecurityPolicyNonceManager()->getNonce()) ?>" src="<?php p($urlGenerator->linkTo('pdfdraw', 'js/libs/iro-4.5.0.min.js')) ?>?v=<?php p($version) ?>"></script>
-    <script nonce="<?php p(\OC::$server->getContentSecurityPolicyNonceManager()->getNonce()) ?>" src="<?php p($urlGenerator->linkTo('pdfdraw', 'js/libs/iro-transparency-plugin-1.0.2.min.js')) ?>?v=<?php p($version) ?>"></script>
     <script nonce="<?php p(\OC::$server->getContentSecurityPolicyNonceManager()->getNonce()) ?>" src="<?php p($urlGenerator->linkTo('pdfdraw', 'js/pdfdraw.js')) ?>?v=<?php p($version) ?>"></script>
   </head>
 
@@ -460,4 +454,3 @@ See https://github.com/adobe-type-tools/cmap-resources
     <div id="printContainer"></div>
   </body>
 </html>
-
