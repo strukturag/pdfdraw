@@ -27,58 +27,71 @@
           user-select: none; /* Non-prefixed version, currently
                                 supported by Chrome and Opera */
 }
+
 .cursor {
   border: 1px solid #ccc;
   padding: 4px;
   background-color: white;
   z-index: 100;
 }
-#presentationMode, #openFile, #print, #download, #viewBookmark, #secondaryToolbarToggle, .verticalToolbarSeparator {
+
+#presentationMode,
+#openFile,
+#print,
+#download,
+#viewBookmark,
+#secondaryToolbarToggle,
+.verticalToolbarSeparator {
   display: none !important;
 }
+
 .noneMode::before {
   content: "";
   display: block;
   width: 16px;
   height: 16px;
   background-size: 16px 16px;
-  background-image: url(../img/icon-notool.svg);
+  background-image: url("../img/icon-notool.svg");
   background-repeat: no-repeat;
 }
+
 .selectMode::before {
   content: "";
   display: block;
   width: 16px;
   height: 16px;
   background-size: 16px 16px;
-  background-image: url(../img/icon-select.svg);
+  background-image: url("../img/icon-select.svg");
   background-repeat: no-repeat;
 }
+
 .pointerMode::before {
   content: "";
   display: block;
   width: 16px;
   height: 16px;
   background-size: 16px 16px;
-  background-image: url(../img/icon-pointer.svg);
+  background-image: url("../img/icon-pointer.svg");
   background-repeat: no-repeat;
 }
+
 .freehandMode::before {
   content: "";
   display: block;
   width: 16px;
   height: 16px;
   background-size: 16px 16px;
-  background-image: url(../img/icon-freehand.svg);
+  background-image: url("../img/icon-freehand.svg");
   background-repeat: no-repeat;
 }
+
 .rectangleMode::before {
   content: "";
   display: block;
   width: 16px;
   height: 16px;
   background-size: 16px 16px;
-  background-image: url(../img/icon-rectangle.svg);
+  background-image: url("../img/icon-rectangle.svg");
   background-repeat: no-repeat;
 }
 
@@ -88,40 +101,41 @@
   width: 16px;
   height: 16px;
   background-size: 16px 16px;
-  background-image: url(../img/icon-ellipse.svg);
+  background-image: url("../img/icon-ellipse.svg");
   background-repeat: no-repeat;
 }
+
 .lineMode::before {
   content: "";
   display: block;
   width: 16px;
   height: 16px;
   background-size: 16px 16px;
-  background-image: url(../img/icon-line.svg);
+  background-image: url("../img/icon-line.svg");
   background-repeat: no-repeat;
 }
+
 .toolbarButton.download::before {
   content: "";
   display: block;
   width: 16px;
   height: 16px;
   background-size: 16px 16px;
-  background-image: url(../img/icon-download.svg);
+  background-image: url("../img/icon-download.svg");
   background-repeat: no-repeat;
 }
 
 .secondaryToolbar.drawMenuToolbar {
   right: 105px !important;
-}
-
-.secondaryToolbar.drawMenuToolbar {
   line-height: 0 !important;
 }
+
 .secondaryToolbar.drawMenuToolbar .toolbarButton::before {
   position: relative !important;
   top: 1px !important;
   left: 1px !important;
 }
+
 .secondaryToolbar.drawMenuToolbar .toolbarButton {
   margin: 0 !important;
 }
@@ -141,15 +155,15 @@
 
 .toolbarButton.close::before {
   display: block;
-  content: ' ';
-  background-image: url(../img/toolbarButton-secondaryToolbarClose.svg);
+  content: " ";
+  background-image: url("../img/toolbarButton-secondaryToolbarClose.svg");
   background-size: 16px 16px;
   height: 16px;
   width: 16px;
 }
 
 #drawModeToolbar .dropdown {
-  background: url(../img/icon-dropdown.svg);
+  background: url("../img/icon-dropdown.svg");
   width: 16px;
   height: 16px;
   background-size: 16px 16px;
@@ -293,10 +307,11 @@
 }
 
 .toolbarButton.selected {
-  background-color: hsla(0,0%,0%,.12);
-  background-image: linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-color: hsla(0, 0%, 0%, 0.12);
+  background-image: linear-gradient(hsla(0, 0%, 100%, 0.05), hsla(0, 0%, 100%, 0));
   background-clip: padding-box;
-  border: 1px solid hsla(0,0%,0%,.35);
-  border-color: hsla(0,0%,0%,.32) hsla(0,0%,0%,.38) hsla(0,0%,0%,.42);
-  box-shadow: 0 1px 0 hsla(0,0%,100%,.05) inset, 0 0 1px hsla(0,0%,100%,.15) inset, 0 1px 0 hsla(0,0%,100%,.05);
+  border: 1px solid hsla(0, 0%, 0%, 0.35);
+  border-color: hsla(0, 0%, 0%, 0.32) hsla(0, 0%, 0%, 0.38) hsla(0, 0%, 0%, 0.42);
+  /* stylelint-disable-next-line max-line-length */
+  box-shadow: 0 1px 0 hsla(0, 0%, 100%, 0.05) inset, 0 0 1px hsla(0, 0%, 100%, 0.15) inset, 0 1px 0 hsla(0, 0%, 100%, 0.05);
 }
