@@ -463,7 +463,57 @@ function svg2pdf(svg_filename) {
   });
 }
 
-function combine_pdfs(pages, filename) {
+function spawn(cmd, args, options) {
+  return new Promise((resolve, reject) => {
+    let stdin;
+    if (options && options.input) {
+      stdin = options.input;
+      delete options.input;
+    }
+
+    const proc = child_process.spawn(cmd, args, options);
+    if (stdin) {
+      proc.stdin.write(stdin, (error) => {
+        proc.stdin.end();
+      });
+    }
+
+    let data;
+    let errorData;
+
+    proc.on("message", console.log);
+
+    proc.stdout.on("data", chunk => {
+      if (!data) {
+        data = chunk;
+      } else {
+        data = Buffer.concat([data, chunk]);
+      }
+    });
+
+    proc.stderr.on("data", chunk => {
+      if (!errorData) {
+        errorData = chunk;
+      } else {
+        errorData = Buffer.concat([errorData, chunk]);
+      }
+    });
+
+    proc.on("close", function(code) {
+      resolve({
+        "status": code,
+        "stdout": data,
+        "stderr": errorData,
+      });
+    });
+
+    proc.on("error", function(err) {
+      reject(err);
+    });
+  });
+}
+
+async function combine_pdfs(pages, filename) {
   if (!pages.length) {
     return false;
   }
@@ -474,7 +524,7 @@ function combine_pdfs(pages, filename) {
   args.push("cat");
   args.push("output");
   args.push(filename);
-  var status = child_process.spawnSync(cmd, args);
+  var status = await spawn(cmd, args);
   console.log("Done", status.status);
   if (status.status !== 0) {
     if (status.stderr) {
@@ -489,7 +539,7 @@ function combine_pdfs(pages, filename) {
   return true;
 }
 
-function overlay_pdf(source_pdf, overlay_filename) {
+async function overlay_pdf(source_pdf, overlay_filename) {
   if (!overlay_filename) {
     return source_pdf;
   }
@@ -497,7 +547,7 @@ function overlay_pdf(source_pdf, overlay_filename) {
   var cmd = CMD_PDFTK;
   console.log("Merging combined with overlay ...");
   var args = ["-", "multistamp", overlay_filename, "output", "-"];
-  var status = child_process.spawnSync(cmd, args, {
+  var status = await spawn(cmd, args, {
     "input": source_pdf,
   });
   console.log("Done", status.status);
@@ -518,7 +568,7 @@ function overlay_pdf(source_pdf, overlay_filename) {
   return merged;
 }
 
-function add_text_annotations(source_pdf, text, tempdir) {
+async function add_text_annotations(source_pdf, text, tempdir) {
   if (!text || !text.length) {
     return source_pdf;
   }
@@ -530,7 +580,7 @@ function add_text_annotations(source_pdf, text, tempdir) {
   fs.writeFileSync(text_filename, JSON.stringify(text));
 
   var args = ["--text", text_filename, "-", "-"];
-  var status = child_process.spawnSync(cmd, args, {
+  var status = await spawn(cmd, args, {
     "input": source_pdf,
   });
   console.log("Done", status.status);
@@ -656,11 +706,14 @@ var runSvg2PdfCombiner = function(tempdir, data) {
     Promise.all(promises)
     .then(function(pdfs) {
       var combined_filename = tempdir + "/combined.pdf";
-      if (!combine_pdfs(pdfs, combined_filename)) {
-        reject();
-        return;
-      }
-      resolve(combined_filename);
+      combine_pdfs(pdfs, combined_filename)
+      .then((status) => {
+        if (!status) {
+          reject();
+          return;
+        }
+        resolve(combined_filename);
+      });
     })
     .catch(function(error) {
       reject(error);
@@ -809,33 +862,37 @@ var server = http.createServer(function(request, response) {
         return;
       }
 
-      var merged = overlay_pdf(source_pdf, combined_filename);
-      merged = add_text_annotations(merged, data.text, tempdir);
-      deleteFolderRecursive(tempdir);
-      if (!merged) {
-        response.writeHead(500, {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "POST",
-          "Access-Control-Allow-Headers": "Content-Type, Content-Disposition",
-          "Access-Control-Expose-Headers": "Content-Disposition",
-          "Content-Type": "text/plain"
-        });
-        response.end('Internal Server Error');
-        return;
-      }
+      overlay_pdf(source_pdf, combined_filename)
+      .then((merged) => {
+        add_text_annotations(merged, data.text, tempdir)
+        .then((merged) => {
+          deleteFolderRecursive(tempdir);
+          if (!merged) {
+            response.writeHead(500, {
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": "POST",
+              "Access-Control-Allow-Headers": "Content-Type, Content-Disposition",
+              "Access-Control-Expose-Headers": "Content-Disposition",
+              "Content-Type": "text/plain"
+            });
+            response.end('Internal Server Error');
+            return;
+          }
 
-      var now = new Date();
-      var filename = getDownloadFilename(decoded.filename || room_id, now);
-      response.writeHead(200, {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST",
-        "Access-Control-Allow-Headers": "Content-Type, Content-Disposition",
-        "Access-Control-Expose-Headers": "Content-Disposition",
-        "Content-Type": "application/pdf",
-        "Content-Disposition": "attachment; filename=\"" + filename + "\"",
-        "Content-Length": merged.length
+          var now = new Date();
+          var filename = getDownloadFilename(decoded.filename || room_id, now);
+          response.writeHead(200, {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST",
+            "Access-Control-Allow-Headers": "Content-Type, Content-Disposition",
+            "Access-Control-Expose-Headers": "Content-Disposition",
+            "Content-Type": "application/pdf",
+            "Content-Disposition": "attachment; filename=\"" + filename + "\"",
+            "Content-Length": merged.length
+          });
+          response.end(merged);
+        });
       });
-      response.end(merged);
     })
     .catch(function(error) {
       deleteFolderRecursive(tempdir);
