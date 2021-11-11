@@ -911,8 +911,11 @@ var server = http.createServer(function(request, response) {
   });
 });
 
-var io = socketio(server);
-io.set('origins', '*:*');
+var io = socketio(server, {
+  'cors': {
+    'origin': '*:*',
+  }
+});
 
 io.on('connection', function(socket) {
   var query = socket.handshake.query;
@@ -1007,13 +1010,13 @@ io.on('connection', function(socket) {
     room.sendMessage(socket, message);
   });
 
-  socket.join(room_id, function() {
-    var displayname = decoded.displayname || null;
-    var permissions = decoded.permissions || null;
-    room.addUser(socket, {
-      'displayname': displayname,
-      'permissions': permissions
-    });
+  socket.join(room_id);
+
+  var displayname = decoded.displayname || null;
+  var permissions = decoded.permissions || null;
+  room.addUser(socket, {
+    'displayname': displayname,
+    'permissions': permissions
   });
 });
 
