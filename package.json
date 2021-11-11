@@ -14,7 +14,7 @@
 		"paper": "0.12.15",
 		"pdfjs-dist": "2.0.943",
 		"pdfjs-dist-viewer-min": "2.0.943",
-		"socket.io-client": "2.1.1"
+		"socket.io-client": "4.3.2"
 	},
 	"devDependencies": {
 		"copy-webpack-plugin": "6.4.1",
