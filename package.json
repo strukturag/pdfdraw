@@ -9,7 +9,7 @@
 		"dev": "NODE_ENV=development webpack --config webpack.js"
 	},
 	"dependencies": {
-		"@jaames/iro": "4.5.0",
+		"@jaames/iro": "5.5.2",
 		"iro-transparency-plugin": "1.0.2",
 		"jquery": "3.5.0",
 		"paper": "0.12.15",
