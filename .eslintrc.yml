@@ -27,6 +27,7 @@ rules:
   no-fallthrough: error
   no-mixed-spaces-and-tabs: error
   no-multiple-empty-lines: ["error", {"max": 1, "maxEOF": 1}]
+  no-prototype-builtins: off
   no-unused-vars: off
   no-use-before-define: error
   padded-blocks: ["error", "never"]

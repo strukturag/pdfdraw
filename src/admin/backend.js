@@ -19,7 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* global OC, OCP, OCA, $, _, Handlebars */
+/* global OCP, $, Handlebars */
 
 (function(OC, OCP, OCA, $, _, Handlebars) {
   'use strict';

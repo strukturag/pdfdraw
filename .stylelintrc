@@ -1,7 +1,16 @@
 {
+  "extends": ["stylelint-config-standard-scss"],
   "rules": {
+    "alpha-value-notation": null,
+    "color-function-notation": null,
+    "hue-degree-notation": null,
+    "indentation": null,
     "media-feature-name-no-unknown": true,
+    "media-feature-name-no-vendor-prefix": null,
     "property-no-unknown": true,
+    "property-no-vendor-prefix": null,
+    "selector-class-pattern": null,
+    "selector-id-pattern": null,
     "selector-pseudo-class-no-unknown": true,
     "selector-pseudo-element-no-unknown": true,
     "selector-type-no-unknown": true,
