@@ -23,7 +23,6 @@
 import $ from 'jquery';
 import io from 'socket.io-client';
 import iro from '@jaames/iro';
-import iroTransparencyPlugin from 'iro-transparency-plugin';
 import paper from 'paper';
 import { pdfjsLib } from 'pdfjs-dist';
 import { PDFViewerApplication, PDFViewerApplicationOptions } from 'pdfjs-dist-viewer-min';
@@ -767,7 +766,6 @@ function Annotator(socketurl, id, userid, displayname, token) {
   this.socket.on('disconnect', this.onDisconnect.bind(this));
   this.socket.on('reconnect', this.onReconnected.bind(this));
 
-  iro.use(iroTransparencyPlugin);
   this.colorPicker = new iro.ColorPicker("#colorPicker", {
     width: 320,
     height: 320,
