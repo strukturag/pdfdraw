@@ -11,7 +11,7 @@
 	"dependencies": {
 		"@jaames/iro": "4.5.0",
 		"iro-transparency-plugin": "1.0.2",
-		"jquery": "3.3.1",
+		"jquery": "3.5.0",
 		"paper": "0.11.8",
 		"pdfjs-dist": "2.0.943",
 		"pdfjs-dist-viewer-min": "2.0.943",
