@@ -3,6 +3,13 @@ const path = require('path');
 const CopyPlugin = require("copy-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 
+const package = require('./package.json');
+const versionPdfJs = package.dependencies['pdfjs-dist'];
+const versionPdfJsViewer = package.dependencies['pdfjs-dist-viewer-min'];
+if (versionPdfJs !== versionPdfJsViewer) {
+  throw new Error('PDF.js (' + versionPdfJs + ') and the viewer (' + versionPdfJsViewer + ') must use the same versions.');
+}
+
 module.exports = {
   entry: {
     'loader': path.join(__dirname, 'src', 'loader.js'),
