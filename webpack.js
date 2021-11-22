@@ -7,7 +7,6 @@ module.exports = {
     'loader': path.join(__dirname, 'src', 'loader.js'),
     'pdfdraw': path.join(__dirname, 'src', 'pdfdraw.js'),
     'admin/backend': path.join(__dirname, 'src', 'admin', 'backend.js'),
-    'pdf': path.join(__dirname, 'node_modules', 'pdfjs-dist', 'build', 'pdf.js'),
     'pdf.worker': path.join(__dirname, 'node_modules', 'pdfjs-dist', 'build', 'pdf.worker.js'),
   },
   externals: {

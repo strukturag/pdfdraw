@@ -41,7 +41,6 @@ See https://github.com/adobe-type-tools/cmap-resources
     <!-- This snippet is used in production (included from viewer.html) -->
     <link rel="resource" type="application/l10n" href="<?php p($urlGenerator->linkTo('pdfdraw', '3rdparty/pdfjs/web/locale/locale.properties')) ?>?v=<?php p($version) ?>">
 
-    <script nonce="<?php p(\OC::$server->getContentSecurityPolicyNonceManager()->getNonce()) ?>" src="<?php p($urlGenerator->linkTo('pdfdraw', 'js/pdf.js')) ?>?v=<?php p($version) ?>"></script>
     <script nonce="<?php p(\OC::$server->getContentSecurityPolicyNonceManager()->getNonce()) ?>" src="<?php p($urlGenerator->linkTo('pdfdraw', 'js/pdf.viewer.js')) ?>?v=<?php p($version) ?>"></script>
 
     <script nonce="<?php p(\OC::$server->getContentSecurityPolicyNonceManager()->getNonce()) ?>" src="<?php p($urlGenerator->linkTo('pdfdraw', 'js/pdfdraw.js')) ?>?v=<?php p($version) ?>"></script>

@@ -24,8 +24,7 @@ import $ from 'jquery';
 import io from 'socket.io-client';
 import iro from '@jaames/iro';
 import paper from 'paper';
-import { pdfjsLib } from 'pdfjs-dist';
-import { PDFViewerApplication, PDFViewerApplicationOptions } from 'pdfjs-dist-viewer-min';
+import { pdfjsLib, PDFViewerApplication, PDFViewerApplicationOptions } from 'pdfjs-dist-viewer-min';
 
 (function() {
 "use strict";
