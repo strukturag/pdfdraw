@@ -1,4 +1,5 @@
-const path = require('path')
+/* eslint-env node */
+const path = require('path');
 const CopyPlugin = require("copy-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 
@@ -33,4 +34,4 @@ module.exports = {
       ],
     }),
   ],
-}
+};
