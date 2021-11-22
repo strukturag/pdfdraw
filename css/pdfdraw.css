@@ -46,98 +46,58 @@
 }
 
 .noneMode::before {
-  content: "";
-  display: block;
-  width: 16px;
-  height: 16px;
-  background-size: 16px 16px;
-  background-image: url("../img/icon-notool.svg");
-  background-repeat: no-repeat;
+  -webkit-mask-image: url("../img/icon-notool.svg");
+  mask-image: url("../img/icon-notool.svg");
 }
 
 .selectMode::before {
-  content: "";
-  display: block;
-  width: 16px;
-  height: 16px;
-  background-size: 16px 16px;
-  background-image: url("../img/icon-select.svg");
-  background-repeat: no-repeat;
+  -webkit-mask-image: url("../img/icon-select.svg");
+  mask-image: url("../img/icon-select.svg");
 }
 
 .pointerMode::before {
-  content: "";
-  display: block;
-  width: 16px;
-  height: 16px;
-  background-size: 16px 16px;
-  background-image: url("../img/icon-pointer.svg");
-  background-repeat: no-repeat;
+  -webkit-mask-image: url("../img/icon-pointer.svg");
+  mask-image: url("../img/icon-pointer.svg");
 }
 
 .freehandMode::before {
-  content: "";
-  display: block;
-  width: 16px;
-  height: 16px;
-  background-size: 16px 16px;
-  background-image: url("../img/icon-freehand.svg");
-  background-repeat: no-repeat;
+  -webkit-mask-image: url("../img/icon-freehand.svg");
+  mask-image: url("../img/icon-freehand.svg");
 }
 
 .rectangleMode::before {
-  content: "";
-  display: block;
-  width: 16px;
-  height: 16px;
-  background-size: 16px 16px;
-  background-image: url("../img/icon-rectangle.svg");
-  background-repeat: no-repeat;
+  -webkit-mask-image: url("../img/icon-rectangle.svg");
+  mask-image: url("../img/icon-rectangle.svg");
 }
 
 .ellipseMode::before {
-  content: "";
-  display: block;
-  width: 16px;
-  height: 16px;
-  background-size: 16px 16px;
-  background-image: url("../img/icon-ellipse.svg");
-  background-repeat: no-repeat;
+  -webkit-mask-image: url("../img/icon-ellipse.svg");
+  mask-image: url("../img/icon-ellipse.svg");
 }
 
 .lineMode::before {
-  content: "";
-  display: block;
-  width: 16px;
-  height: 16px;
-  background-size: 16px 16px;
-  background-image: url("../img/icon-line.svg");
-  background-repeat: no-repeat;
+  -webkit-mask-image: url("../img/icon-line.svg");
+  mask-image: url("../img/icon-line.svg");
 }
 
+/*
+// Provided by viewer.css
 .toolbarButton.download::before {
-  content: "";
-  display: block;
-  width: 16px;
-  height: 16px;
-  background-size: 16px 16px;
-  background-image: url("../img/icon-download.svg");
-  background-repeat: no-repeat;
+  -webkit-mask-image: url("../img/icon-download.svg");
+  mask-image: url("../img/icon-download.svg");
 }
+*/
 
 .secondaryToolbar.drawMenuToolbar {
-  right: 105px !important;
+  padding: 0;
+  right: 94px !important;
   line-height: 0 !important;
 }
 
-.secondaryToolbar.drawMenuToolbar .toolbarButton::before {
-  position: relative !important;
-  top: 1px !important;
-  left: 1px !important;
-}
-
 .secondaryToolbar.drawMenuToolbar .toolbarButton {
-  margin: 0 !important;
+  margin: 2px 1px;
+  position: relative;
+  float: left;
 }
 
 #colorPicker {
@@ -169,40 +129,6 @@
   background-size: 16px 16px;
   background-repeat: no-repeat;
   margin-top: -2px;
-}
-
-@media screen and (-webkit-min-device-pixel-ratio: 2), screen and (min-resolution: 2dppx) {
-  #noneMode::before,
-  #selectMode::before,
-  #pointerMode::before,
-  #freehandMode::before,
-  #rectangleMode::before,
-  #ellipseMode::before,
-  #lineMode::before,
-  #drawModeToolbar::before,
-  #secondaryToolbarClose::before,
-  .toolbarButton.download::before {
-      background-size: 32px 32px !important;
-      height: 32px !important;
-      width: 32px !important;
-  }
-
-  .secondaryToolbar.drawMenuToolbar .toolbarButton::before {
-      top: -7px !important;
-      left: -7px !important;
-  }
-
-  #drawModeToolbarButtonContainer {
-      max-height: 26px;
-  }
-}
-
-@media screen and (min-resolution: 2dppx) {
-  .toolbarButton.close::before {
-    background-size: 32px 32px !important;
-    height: 32px !important;
-    width: 32px !important;
-  }
 }
 
 .userlist {

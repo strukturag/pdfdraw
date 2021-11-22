@@ -1325,46 +1325,49 @@ $(document).ready(function() {
 
   var annotator = new Annotator(socketurl, fileid, userid, displayname, token);
 
-  $(document).on('pagesloaded', function(event) {
-    annotator.documentLoaded(PDFViewerApplication.pdfViewer.pdfDocument);
-    if (!can_update) {
-      $('#viewer .page[data-page-number!=1]').addClass('hiddenPage');
-    }
-  });
+  PDFViewerApplication.initializedPromise.then(function() {
+    var eventBus = PDFViewerApplication.eventBus;
+    eventBus.on('pagesloaded', function(event) {
+      annotator.documentLoaded(PDFViewerApplication.pdfViewer.pdfDocument);
+      if (!can_update) {
+        $('#viewer .page[data-page-number!=1]').addClass('hiddenPage');
+      }
+    });
 
-  $(document).on('pagerendered', function(event) {
-    var pagenum = event.detail.pageNumber;
-    if (!pagenum) {
-      console.log("Rendered event without page number", event);
-      return;
-    }
+    eventBus.on('pagerendered', function(event) {
+      var pagenum = event.pageNumber;
+      if (!pagenum) {
+        console.log("Rendered event without page number", event);
+        return;
+      }
 
-    var container = $(event.target);
-    PDFViewerApplication.pdfViewer.pdfDocument.getPage(pagenum).then(function(page) {
-      annotator.getPage(pagenum, page, container).then(function(page_annotator) {
-        page_annotator.update(PDFViewerApplication.pdfViewer.currentScale);
+      var container = $("#viewer .page[data-page-number='" + pagenum + "']");
+      if (!container.length) {
+        console.log("Could not get page container", event);
+        return;
+      }
+
+      PDFViewerApplication.pdfViewer.pdfDocument.getPage(pagenum).then(function(page) {
+        annotator.getPage(pagenum, page, container).then(function(page_annotator) {
+          page_annotator.update(PDFViewerApplication.pdfViewer.currentScale);
+        });
       });
     });
-  });
 
-  $(document).on('pagechange', function(event) {
-    var originalEvent = event.originalEvent;
-    if (!originalEvent || typeof(originalEvent.pageNumber) === 'undefined') {
-      return;
-    }
-
-    var pagenum = originalEvent.pageNumber;
-    if (can_update) {
-      annotator.switchPage(pagenum);
-    } else {
-      $('#viewer .page').addClass('hiddenPage');
-      var page = $('#viewer .page[data-page-number=' + pagenum +']');
-      page.removeClass('hiddenPage');
-      // Need to redraw currently visible page to fix any layout issues.
-      setTimeout(function() {
-        PDFViewerApplication.pdfViewer.update();
-      }, 0);
-    }
+    eventBus.on('pagechanging', function(event) {
+      var pagenum = event.pageNumber;
+      if (can_update) {
+        annotator.switchPage(pagenum);
+      } else {
+        $('#viewer .page').addClass('hiddenPage');
+        var page = $('#viewer .page[data-page-number=' + pagenum +']');
+        page.removeClass('hiddenPage');
+        // Need to redraw currently visible page to fix any layout issues.
+        setTimeout(function() {
+          PDFViewerApplication.pdfViewer.update();
+        }, 0);
+      }
+    });
   });
 
   $(".modeButton").click(function(event) {
