@@ -756,15 +756,15 @@ function Annotator(socketurl, id, userid, displayname, token) {
   });
   // Also allow polling connections when the connection was interrupted once
   // (could be caused by proxy / firewall).
-  this.socket.on('reconnect_attempt', function() {
+  this.socket.io.on('reconnect_attempt', function() {
     this.socket.io.opts.transports = ['polling', 'websocket'];
   }.bind(this));
+  this.socket.io.on('reconnect', this.onReconnected.bind(this));
   this.socket.on('message', this.onMessage.bind(this));
   this.socket.on('user.joined', this.onUserJoined.bind(this));
   this.socket.on('user.left', this.onUserLeft.bind(this));
   this.socket.on('connect', this.onConnected.bind(this));
   this.socket.on('disconnect', this.onDisconnect.bind(this));
-  this.socket.on('reconnect', this.onReconnected.bind(this));
 
   this.colorPicker = new iro.ColorPicker("#colorPicker", {
     width: 320,
