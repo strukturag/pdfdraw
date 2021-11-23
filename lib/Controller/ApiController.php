@@ -25,15 +25,18 @@ namespace OCA\Pdfdraw\Controller;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use \Firebase\JWT\JWT;
+use OC\Files\Filesystem;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataDownloadResponse;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\Files\Config\IUserMountCache;
 use OCP\Files\File;
 use OCP\Files\IRootFolder;
 use OCP\IConfig;
 use OCP\IDBConnection;
+use OCP\ILogger;
 use OCP\IRequest;
 
 class ApiController extends OCSController {
@@ -48,8 +51,14 @@ class ApiController extends OCSController {
 	 */
 	private $root;
 
+	/** @var IUserMountCache */
+	private $userMountCache;
+
 	/** @var IConfig */
 	private $config;
+
+	/** @var ILogger */
+	private $logger;
 
 	/**
 	 * @param string $AppName
@@ -60,11 +69,15 @@ class ApiController extends OCSController {
 			IRequest $request,
 			IDBConnection $db,
 			IRootFolder $root,
-			IConfig	$config) {
+			IUserMountCache $userMountCache,
+			IConfig	$config,
+			ILogger $logger) {
 		parent::__construct($AppName, $request);
 		$this->db = $db;
 		$this->root = $root;
+		$this->userMountCache = $userMountCache;
 		$this->config = $config;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -229,46 +242,45 @@ class ApiController extends OCSController {
 			return new DataResponse([], Http::STATUS_UNAUTHORIZED);
 		}
 
-		$query = $this->db->getQueryBuilder();
-		$query->select('storage')
-			->from('filecache')
-			->where($query->expr()->eq('fileid', $query->createNamedParameter($fileId)));
-		$result = $query->execute();
-		$storage = null;
-		while ($row = $result->fetch()) {
-			$storage = $row['storage'];
-			break;
-		}
-		if (empty($storage)) {
+		$mountPoints = $this->userMountCache->getMountsForFileId($fileId);
+		if (empty($mountPoints)) {
 			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		}
 
-		$query = $this->db->getQueryBuilder();
-		$query->select('id')
-			->from('storages')
-			->where($query->expr()->eq('numeric_id', $query->createNamedParameter($storage)));
-		$result = $query->execute();
-		$homeId = null;
-		while ($row = $result->fetch()) {
-			$homeId = $row['id'];
-			break;
-		}
-		if (empty($homeId) || strpos($homeId, 'home::') !== 0) {
-			return new DataResponse([], Http::STATUS_NOT_FOUND);
+		foreach ($mountPoints as $mountPoint) {
+			try {
+				$userId = $mountPoint->getUser()->getUID();
+				$userFolder = $this->root->getUserFolder($userId);
+				if (!Filesystem::$loaded) {
+					// Filesystem wasn't loaded for anyone,
+					// so we boot it up in order to make hooks in the View work.
+					Filesystem::init($userId, '/' . $userId . '/files');
+				}
+			} catch (\Exception $e) {
+				$this->logger->debug($e->getMessage(), [
+					'app' => $this->appName,
+					'exception' => $e,
+				]);
+				continue;
+			}
+
+			$files = $userFolder->getById($fileId);
+			if (empty($files)) {
+				continue;
+			}
+
+			foreach ($files as $file) {
+				if ($file->isReadable()) {
+					return new DataDownloadResponse($file->getContent(), $file->getName(), $file->getMimeType());
+				}
+
+				$this->logger->debug('Mount point ' . ($mountPoint->getMountId() ?? 'null') . ' has access to file ' . $file->getId() . ' but permissions are ' . $file->getPermissions(), [
+					'app' => $this->appName,
+				]);
+			}
 		}
 
-		$ownerId = substr($homeId, 6);
-		$files = $this->root->getUserFolder($ownerId)->getById($fileId);
-		if (empty($files)) {
-			return new DataResponse([], Http::STATUS_NOT_FOUND);
-		}
-
-		$file = $files[0];
-		if (!$file instanceof File) {
-			return new DataResponse([], Http::STATUS_NOT_FOUND);
-		}
-
-		return new DataDownloadResponse($file->getContent(), $file->getName(), $file->getMimeType());
+		return new DataResponse([], Http::STATUS_NOT_FOUND);
 	}
 
 }
