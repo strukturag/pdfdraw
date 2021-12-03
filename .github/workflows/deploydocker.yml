@@ -3,6 +3,8 @@ name: Deploy to Docker Hub / GHCR
 on:
   pull_request:
   push:
+    paths:
+      - "server/**"
     branches:
       - master
     tags:
