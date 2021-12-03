@@ -18,9 +18,17 @@
 ## You should have received a copy of the GNU Affero General Public License
 ## along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
-from cStringIO import StringIO
+from __future__ import print_function
+
+from io import BytesIO
 import sys
 import time
+
+try:
+  basestring
+except NameError:
+  # Python 3
+  basestring = str
 
 try:
   from PyPDF2.generic import ArrayObject, BooleanObject, DictionaryObject, FloatObject, NameObject, RectangleObject, TextStringObject
@@ -49,7 +57,7 @@ def annotate(fp_in, annotations):
     try:
       pdfpage = pdf.getPage(page)
     except IndexError:
-      print >> sys.stderr, 'Page %d not found in pdf, not adding annotations %r' % (page, annotation)
+      print('Page %d not found in pdf, not adding annotation %r' % (page, annotation), file=sys.stderr)
       continue
 
     size = pdfpage.mediaBox
@@ -64,19 +72,19 @@ def annotate(fp_in, annotations):
     else:
       x = float(x)
       y = float(y)
-      print >> sys.stderr, 'Page rotated by %d degrees not implemented yet' % (angle)
+      print('Page rotated by %d degrees not implemented yet' % (angle), file=sys.stderr)
 
     color = annotation.get('color', None)
     if isinstance(color, basestring):
       if color[:1] != '#':
-        print >> sys.stderr, 'Unsupported color format: %s' % (color)
+        print('Unsupported color format: %s' % (color), file=sys.stderr)
         color = None
       else:
         # Assume HTML color with format "#RRGGBB".
         try:
           color = int(color[1:], 16)
         except ValueError as e:
-          print >> sys.stderr, 'Unsupported color format: %s (%s)' % (color, e)
+          print('Unsupported color format: %s (%s)' % (color, e), file=sys.stderr)
           color = None
 
     if color is not None:
@@ -113,7 +121,6 @@ def annotate(fp_in, annotations):
     else:
       annots.append(annoRef)
 
-  fp_out = StringIO()
+  fp_out = BytesIO()
   pdf.write(fp_out)
   return fp_out.getvalue()
-

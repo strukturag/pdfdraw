@@ -20,9 +20,10 @@
 ## You should have received a copy of the GNU Affero General Public License
 ## along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ##
+from __future__ import print_function
 
 import argparse
-from cStringIO import StringIO
+from io import BytesIO
 import json
 import sys
 
@@ -42,21 +43,21 @@ def main():
   args = parser.parse_args()
 
   try:
-    annotations = json.loads(file(args.text, 'rb').read())
-  except Exception, e:
+    annotations = json.loads(open(args.text, 'rb').read())
+  except Exception as e:
     parser.error('Could not open/read text annotations: %s' % (e))
 
   if args.input == '-':
-    fp_in = StringIO(sys.stdin.read())
+    fp_in = BytesIO(sys.stdin.read())
   else:
-    fp_in = file(args.input, 'rb')
+    fp_in = open(args.input, 'rb')
 
   pdf_data = annotate(fp_in, annotations)
 
   if args.output == '-':
     sys.stdout.write(pdf_data)
   else:
-    with file(args.output, 'wb') as fp:
+    with open(args.output, 'wb') as fp:
       fp.write(pdf_data)
 
 if __name__ == '__main__':
