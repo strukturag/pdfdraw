@@ -148,7 +148,7 @@ class ViewerController extends Controller {
 	 */
 	private function getFile($userId, $fileId) {
 		if (empty($fileId)) {
-			return [NULL, $this->l10n->t("FileId is empty")];
+			return [NULL, $this->l10n->t("FileId is empty.")];
 		}
 
 		if ($userId !== NULL) {
@@ -159,19 +159,19 @@ class ViewerController extends Controller {
 		}
 
 		if (empty($files)) {
-			return [NULL, $this->l10n->t("File not found")];
+			return [NULL, $this->l10n->t("File not found.")];
 		}
 		$file = $files[0];
 
 		if (!$file->isReadable()) {
-			return [NULL, $this->l10n->t("You do not have enough permissions to view the file")];
+			return [NULL, $this->l10n->t("You do not have enough permissions to view the file.")];
 		}
 		return [$file, NULL];
 	}
 
 	private function getShare($token) {
 		if (empty($token)) {
-			return [NULL, $this->l10n->t("Token is empty")];
+			return [NULL, $this->l10n->t("Token is empty.")];
 		}
 
 		$share;
@@ -183,13 +183,13 @@ class ViewerController extends Controller {
 		}
 
 		if ($share === NULL || $share === false) {
-			return [NULL, $this->l10n->t("You do not have enough permissions to view the file")];
+			return [NULL, $this->l10n->t("You do not have enough permissions to view the file.")];
 		}
 
 		if ($share->getPassword()
 			&& (!$this->session->exists("public_link_authenticated")
 				|| $this->session->get("public_link_authenticated") !== (string) $share->getId())) {
-			return [NULL, $this->l10n->t("You do not have enough permissions to view the file")];
+			return [NULL, $this->l10n->t("You do not have enough permissions to view the file.")];
 		}
 
 		return [$share, NULL];
@@ -203,20 +203,20 @@ class ViewerController extends Controller {
 		}
 
 		if (($share->getPermissions() & Constants::PERMISSION_READ) === 0) {
-			return [NULL, $this->l10n->t("You do not have enough permissions to view the file")];
+			return [NULL, $this->l10n->t("You do not have enough permissions to view the file.")];
 		}
 
 		try {
 			$node = $share->getNode();
 		} catch (NotFoundException $e) {
 			$this->logger->error("getFileByToken error: " . $e->getMessage(), array("app" => $this->appName));
-			return [NULL, $this->l10n->t("File not found")];
+			return [NULL, $this->l10n->t("File not found.")];
 		}
 
 		if ($node instanceof Folder) {
 			$files = $node->getById($fileId);
 			if (empty($files)) {
-				return [NULL, $this->l10n->t("File not found")];
+				return [NULL, $this->l10n->t("File not found.")];
 			}
 			$file = $files[0];
 		} else {
@@ -272,7 +272,7 @@ class ViewerController extends Controller {
 			$mime = strtolower($mime);
 		}
 		if (!in_array($mime, self::PDF_MIME_TYPES)) {
-			return $this->l10n->t('File %s is not a PDF file (%s)', [$file->getName(), $mime]);
+			return $this->l10n->t('File %s is not a PDF file (%s).', [$file->getName(), $mime]);
 		}
 
 		return null;
@@ -453,7 +453,7 @@ class ViewerController extends Controller {
 				'message' => 'download: ' . $token,
 				'app' => $this->appName,
 			]);
-			return new JSONResponse(["message" => $this->l10n->t("Invalid token")], Http::STATUS_FORBIDDEN);
+			return new JSONResponse(["message" => $this->l10n->t("Invalid token.")], Http::STATUS_FORBIDDEN);
 		}
 
 		if ($this->userSession->isLoggedIn()) {
@@ -470,7 +470,7 @@ class ViewerController extends Controller {
 		}
 
 		if ($this->userSession->isLoggedIn() && !$file->isReadable()) {
-			return new JSONResponse(["message" => $this->l10n->t("Access denied")], Http::STATUS_FORBIDDEN);
+			return new JSONResponse(["message" => $this->l10n->t("Access denied.")], Http::STATUS_FORBIDDEN);
 		}
 
 		return new DataDisplayResponse($file->getContent(), Http::STATUS_OK, [

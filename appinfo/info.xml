@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <info>
 	<id>pdfdraw</id>
-	<name>PDF annotations</name>
+	<name>PDF Annotations</name>
 	<summary><![CDATA[Annotate PDF documents]]></summary>
 	<description><![CDATA[PDF annotations for Nextcloud
 

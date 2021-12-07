@@ -8,7 +8,28 @@ sign_dir=$(build_dir)/sign
 package_name=$(app_name)
 cert_dir=$(HOME)/.nextcloud/certificates
 
+POT_FILES=$(wildcard translationfiles/*/pdfdraw.po)
+
 all: npm build
+
+translationtool.phar:
+	curl -L -o translationtool.phar https://github.com/nextcloud/docker-ci/raw/master/translations/translationtool/translationtool.phar
+	chmod a+x translationtool.phar
+
+.PHONY: pot
+pot: translationtool.phar
+	./translationtool.phar create-pot-files
+	sed -i "s|$(CURDIR)/||" translationfiles/templates/pdfdraw.pot
+
+.PHONY: po
+po: $(POT_FILES)
+
+translationfiles/%/pdfdraw.po: translationtool.phar pot
+	msgmerge --update $@ translationfiles/templates/pdfdraw.pot
+
+.PHONY: l10n
+l10n: translationtool.phar
+	./translationtool.phar convert-po-files
 
 npm: package.json package-lock.json
 	npm install

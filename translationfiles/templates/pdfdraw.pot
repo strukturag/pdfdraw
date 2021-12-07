@@ -1,0 +1,178 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Nextcloud package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Nextcloud 3.14159\n"
+"Report-Msgid-Bugs-To: translations\\@example.com\n"
+"POT-Creation-Date: 2021-12-07 16:43+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: lib/Controller/ViewerController.php:151
+msgid "FileId is empty."
+msgstr ""
+
+#: lib/Controller/ViewerController.php:162
+#: lib/Controller/ViewerController.php:213
+#: lib/Controller/ViewerController.php:219
+msgid "File not found."
+msgstr ""
+
+#: lib/Controller/ViewerController.php:167
+#: lib/Controller/ViewerController.php:186
+#: lib/Controller/ViewerController.php:192
+#: lib/Controller/ViewerController.php:206
+msgid "You do not have enough permissions to view the file."
+msgstr ""
+
+#: lib/Controller/ViewerController.php:174
+msgid "Token is empty."
+msgstr ""
+
+#: lib/Controller/ViewerController.php:275
+#, php-format
+msgid "File %s is not a PDF file (%s)."
+msgstr ""
+
+#: lib/Controller/ViewerController.php:312
+msgid "No backend configured."
+msgstr ""
+
+#: lib/Controller/ViewerController.php:456
+msgid "Invalid token."
+msgstr ""
+
+#: lib/Controller/ViewerController.php:473
+msgid "Access denied."
+msgstr ""
+
+#: lib/Settings/Admin/Section.php:77
+#: specialAppInfoFakeDummyForL10nScript.php:2
+#: templates/settings/admin/backend.php:9
+msgid "PDF Annotations"
+msgstr ""
+
+#: specialAppInfoFakeDummyForL10nScript.php:3
+msgid "Annotate PDF documents"
+msgstr ""
+
+#: specialAppInfoFakeDummyForL10nScript.php:4
+msgid ""
+"PDF annotations for Nextcloud\n"
+"\n"
+"Annotate any PDF document collaboratively inside Nextcloud. Select \"Annotate"
+"\" from the context menu of PDF files to open the annotation mode.\n"
+"\n"
+"Requires a separate nodejs server running on the backend to distribute the "
+"signaling messages between clients.\n"
+"The server is available on [GitHub](https://github.com/strukturag/pdfdraw/"
+"tree/master/server)."
+msgstr ""
+
+#: src/loader.js:42
+#: src/loader.js:96
+msgid "Annotate"
+msgstr ""
+
+#: src/loader.js:105
+msgid "Open"
+msgstr ""
+
+#: templates/settings/admin/backend.php:11
+#: templates/settings/admin/backend.php:13
+msgid "Backend server"
+msgstr ""
+
+#: templates/settings/admin/backend.php:13
+msgid "https://server.domain.invalid/path/"
+msgstr ""
+
+#: templates/settings/admin/backend.php:14
+#: templates/settings/admin/backend.php:20
+msgid "Saved"
+msgstr ""
+
+#: templates/settings/admin/backend.php:17
+#: templates/settings/admin/backend.php:19
+msgid "Shared secret"
+msgstr ""
+
+#: templates/viewer.php:53
+msgid "Establishing connection, please wait..."
+msgstr ""
+
+#: templates/viewer.php:56
+msgid "The connection is interrupted, reconnecting..."
+msgstr ""
+
+#: templates/viewer.php:59
+msgid "Generating combined PDF, please wait..."
+msgstr ""
+
+#: templates/viewer.php:62
+msgid "PDF generation failed, please try again later."
+msgstr ""
+
+#: templates/viewer.php:222
+#: templates/viewer.php:224
+msgid "Freehand"
+msgstr ""
+
+#: templates/viewer.php:227
+#: templates/viewer.php:229
+msgid "Rectangle"
+msgstr ""
+
+#: templates/viewer.php:232
+#: templates/viewer.php:234
+msgid "Ellipse"
+msgstr ""
+
+#: templates/viewer.php:237
+#: templates/viewer.php:239
+msgid "Line"
+msgstr ""
+
+#: templates/viewer.php:289
+#: templates/viewer.php:291
+msgid "No tool"
+msgstr ""
+
+#: templates/viewer.php:294
+#: templates/viewer.php:296
+msgid "Select"
+msgstr ""
+
+#: templates/viewer.php:299
+#: templates/viewer.php:301
+msgid "Pointer"
+msgstr ""
+
+#: templates/viewer.php:305
+#: templates/viewer.php:307
+msgid "Draw mode"
+msgstr ""
+
+#: templates/viewer.php:312
+#: templates/viewer.php:314
+msgid "Select color"
+msgstr ""
+
+#: templates/viewer.php:317
+#: templates/viewer.php:319
+msgid "Download"
+msgstr ""
+
+#: templates/viewer.php:322
+#: templates/viewer.php:324
+msgid "Close"
+msgstr ""

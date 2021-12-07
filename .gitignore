@@ -4,3 +4,7 @@ build/
 js/
 server/config.js
 server/docker-compose.yml
+translationtool.phar
+
+*.mo
+*.po~

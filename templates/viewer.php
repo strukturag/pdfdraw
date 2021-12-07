@@ -50,16 +50,16 @@ See https://github.com/adobe-type-tools/cmap-resources
     <div id="colorPicker">
     </div>
     <div id="connectingMessage">
-      Establishing connection, please wait...
+      <?php p($l->t('Establishing connection, please wait...')) ?>
     </div>
     <div id="connectionError">
-      The connection is interrupted, reconnecting...
+      <?php p($l->t('The connection is interrupted, reconnecting...')) ?>
     </div>
     <div id="downloadInProgress">
-      Generating combined PDF, please wait...
+      <?php p($l->t('Generating combined PDF, please wait...')) ?>
     </div>
     <div id="downloadFailed">
-      PDF generation failed, please try again later.
+      <?php p($l->t('PDF generation failed, please try again later.')) ?>
     </div>
     <div id="outerContainer">
 
@@ -219,17 +219,25 @@ See https://github.com/adobe-type-tools/cmap-resources
 
         <div id="drawMenuToolbar" class="secondaryToolbar drawMenuToolbar hidden doorHangerRight hiddenReadonly">
           <div id="drawModeToolbarButtonContainer">
-            <button id="freehandMode" class="modeButton toolbarButton freehandMode hiddenMediumView" title="Freehand" tabindex="34" data-l10n-id="freehand" data-mode="freehand">
-              <span data-l10n-id="freehand_label">Freehand</span>
+            <button id="freehandMode" class="modeButton toolbarButton freehandMode hiddenMediumView" title="<?php p($l->t('Freehand')) ?>" tabindex="34" data-l10n-id="freehand" data-mode="freehand">
+              <span data-l10n-id="freehand_label">
+                <?php p($l->t('Freehand')) ?>
+              </span>
             </button>
-            <button id="rectangleMode" class="modeButton toolbarButton rectangleMode hiddenMediumView" title="Rectangle" tabindex="34" data-l10n-id="rectangle" data-mode="rectangle">
-              <span data-l10n-id="rectangle_label">Rectangle</span>
+            <button id="rectangleMode" class="modeButton toolbarButton rectangleMode hiddenMediumView" title="<?php p($l->t('Rectangle')) ?>" tabindex="34" data-l10n-id="rectangle" data-mode="rectangle">
+              <span data-l10n-id="rectangle_label">
+                <?php p($l->t('Rectangle')) ?>
+              </span>
             </button>
-            <button id="ellipseMode" class="modeButton toolbarButton ellipseMode hiddenMediumView" title="Ellipse" tabindex="34" data-l10n-id="ellipse" data-mode="ellipse">
-                <span data-l10n-id="ellipse_label">Ellipse</span>
+            <button id="ellipseMode" class="modeButton toolbarButton ellipseMode hiddenMediumView" title="<?php p($l->t('Ellipse')) ?>" tabindex="34" data-l10n-id="ellipse" data-mode="ellipse">
+              <span data-l10n-id="ellipse_label">
+                <?php p($l->t('Ellipse')) ?>
+              </span>
             </button>
-            <button id="lineMode" class="modeButton toolbarButton lineMode hiddenMediumView" title="Line" tabindex="34" data-l10n-id="line" data-mode="line">
-                <span data-l10n-id="line_label">Line</span>
+            <button id="lineMode" class="modeButton toolbarButton lineMode hiddenMediumView" title="<?php p($l->t('Line')) ?>" tabindex="34" data-l10n-id="line" data-mode="line">
+              <span data-l10n-id="line_label">
+                <?php p($l->t('Line')) ?>
+              </span>
             </button>
 
           </div>
@@ -278,29 +286,43 @@ See https://github.com/adobe-type-tools/cmap-resources
                   <span data-l10n-id="bookmark_label">Current View</span>
                 </a>
 
-                <button id="noneMode" class="modeButton toolbarButton noneMode hiddenMediumView hiddenReadonly" title="No tool" tabindex="32" data-l10n-id="noneMode" data-mode="">
-                  <span data-l10n-id="noneMode_label">No tool</span>
+                <button id="noneMode" class="modeButton toolbarButton noneMode hiddenMediumView hiddenReadonly" title="<?php p($l->t('No tool')) ?>" tabindex="32" data-l10n-id="noneMode" data-mode="">
+                  <span data-l10n-id="noneMode_label">
+                    <?php p($l->t('No tool')); ?>
+                  </span>
                 </button>
-                <button id="selectMode" class="modeButton toolbarButton selectMode hiddenMediumView hiddenReadonly" title="Select" tabindex="32" data-l10n-id="selectMode" data-mode="select">
-                  <span data-l10n-id="selectMode_label">Select</span>
+                <button id="selectMode" class="modeButton toolbarButton selectMode hiddenMediumView hiddenReadonly" title="<?php p($l->t('Select')) ?>" tabindex="32" data-l10n-id="selectMode" data-mode="select">
+                  <span data-l10n-id="selectMode_label">
+                    <?php p($l->t('Select')); ?>
+                  </span>
                 </button>
-                <button id="pointerMode" class="modeButton toolbarButton pointerMode hiddenMediumView hiddenReadonly" title="Pointer" tabindex="33" data-l10n-id="pointer" data-mode="pointer">
-                  <span data-l10n-id="pointer_label">Pointer</span>
+                <button id="pointerMode" class="modeButton toolbarButton pointerMode hiddenMediumView hiddenReadonly" title="<?php p($l->t('Pointer')); ?>" tabindex="33" data-l10n-id="pointer" data-mode="pointer">
+                  <span data-l10n-id="pointer_label">
+                    <?php p($l->t('Pointer')) ?>
+                  </span>
                 </button>
 
-                <button id="drawModeToolbar" class="toolbarButton drawMode freehandMode toggle hiddenReadonly" title="Draw mode" tabindex="36" data-l10n-id="draw_mode">
-                  <span data-l10n-id="tools_label">Draw mode</span>
+                <button id="drawModeToolbar" class="toolbarButton drawMode freehandMode toggle hiddenReadonly" title="<?php p($l->t('Draw mode')) ?>" tabindex="36" data-l10n-id="draw_mode">
+                  <span data-l10n-id="tools_label">
+                    <?php p($l->t('Draw mode')); ?>
+                  </span>
                   <span class="dropdown"></span>
                 </button>
 
-                <button id="colorMode" class="modeButton toolbarButton colorMode hiddenMediumView hiddenReadonly" title="Select color" tabindex="35" data-l10n-id="color" data-mode="color">
-                  <span data-l10n-id="color_label">Select color</span>
+                <button id="colorMode" class="modeButton toolbarButton colorMode hiddenMediumView hiddenReadonly" title="<?php p($l->t('Select color')) ?>" tabindex="35" data-l10n-id="color" data-mode="color">
+                  <span data-l10n-id="color_label">
+                    <?php p($l->t('Select color')) ?>
+                  </span>
                 </button>
-                <button id="downloadPdf" class="toolbarButton download hiddenMediumView" title="Download" tabindex="36" data-l10n-id="download">
-                  <span data-l10n-id="download_label">Download</span>
+                <button id="downloadPdf" class="toolbarButton download hiddenMediumView" title="<?php p($l->t('Download')) ?>" tabindex="36">
+                  <span>
+                    <?php p($l->t('Download')) ?>
+                  </span>
                 </button>
-                <button id="secondaryToolbarClose" class="toolbarButton close" title="Close" tabindex="37" data-l10n-id="Close">
-                  <span data-l10n-id="close_label">Close</span>
+                <button id="secondaryToolbarClose" class="toolbarButton close" title="<?php p($l->t('Close')) ?>" tabindex="37" data-l10n-id="Close">
+                  <span data-l10n-id="close_label">
+                    <?php p($l->t('Close')) ?>
+                  </span>
                 </button>
 
                 <div class="verticalToolbarSeparator hiddenSmallView"></div>
