@@ -47,7 +47,15 @@ See https://github.com/adobe-type-tools/cmap-resources
   </head>
 
   <body tabindex="1" class="loadingInProgress">
-    <div id="colorPicker">
+    <div id="settingsDialog">
+      <div id="colorPicker"></div>
+      <div class="settings-field">
+        <label for="inputStrokeWidth">
+          <?php p($l->t('Stroke width')) ?>
+          <span id="strokeWidthValue"></span>
+        </label>
+        <input type="range" min="1" max="10" id="inputStrokeWidth" value="5"/>
+      </div>
     </div>
     <div id="connectingMessage">
       <?php p($l->t('Establishing connection, please wait...')) ?>

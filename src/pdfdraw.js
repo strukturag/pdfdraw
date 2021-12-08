@@ -49,6 +49,8 @@ var INITAL_COLORS  = [
   "#800080",
 ];
 
+var DEFAULT_STROKE_WIDTH = 5;
+
 var PERMISSION_CREATE = 4;
 var PERMISSION_READ = 1;
 var PERMISSION_UPDATE = 2;
@@ -170,7 +172,7 @@ FreehandDrawer.prototype.onMouseDown = function(page_annotator, event) {
   this.path = page_annotator.createPath({
     name: getObjectId(),
     strokeColor: this.annotator.color,
-    strokeWidth: 5
+    strokeWidth: this.annotator.strokeWidth,
   });
 };
 
@@ -220,7 +222,7 @@ RectangleDrawer.prototype.onMouseDown = function(page_annotator, event) {
   this.options = {
     name: getObjectId(),
     strokeColor: this.annotator.color,
-    strokeWidth: 5,
+    strokeWidth: this.annotator.strokeWidth,
     from: [event.point.x, event.point.y],
     to: [event.point.x, event.point.y],
   };
@@ -269,7 +271,7 @@ EllipseDrawer.prototype.onMouseDown = function(page_annotator, event) {
   this.options = {
     name: getObjectId(),
     strokeColor: this.annotator.color,
-    strokeWidth: 5,
+    strokeWidth: this.annotator.strokeWidth,
     from: [event.point.x, event.point.y],
     to: [event.point.x, event.point.y],
   };
@@ -440,12 +442,12 @@ SelectDrawer.prototype.onItemMoved = function(page_annotator, name, item, event)
 
 var ColorPickerDrawer = function(annotator, previous_mode) {
   BaseDrawer.apply(this, arguments);
-  this.annotator.showColorPicker();
+  this.annotator.showSettings();
 };
 ColorPickerDrawer.prototype = Object.create(BaseDrawer.prototype);
 
 ColorPickerDrawer.prototype.destroy = function() {
-  this.annotator.hideColorPicker();
+  this.annotator.hideSettings();
 };
 
 ColorPickerDrawer.prototype.onClick = function(page_annotator, event) {
@@ -724,6 +726,17 @@ PageAnnotator.prototype.deleteItem = function(name) {
   path.remove();
 };
 
+function parseStrokeWidth(value) {
+  if (typeof(value) !== "number") {
+    value = parseInt(value, 10);
+  }
+  if (value <= 0 || isNaN(value)) {
+    return DEFAULT_STROKE_WIDTH;
+  }
+
+  return value;
+}
+
 function Annotator(socketurl, id, userid, displayname, token) {
   this.annotators = {};
   this.cursors = {};
@@ -740,6 +753,14 @@ function Annotator(socketurl, id, userid, displayname, token) {
     this.storage.set('color', color);
   }
   this.color = color;
+  var strokeWidth = this.storage.get('strokeWidth');
+  if (!strokeWidth) {
+    strokeWidth = DEFAULT_STROKE_WIDTH;
+    this.storage.set('strokeWidth', strokeWidth);
+  } else {
+    strokeWidth = parseStrokeWidth(strokeWidth);
+  }
+  this.strokeWidth = strokeWidth;
   this.pageCount = -1;
   this.currentPage = null;
   this.users = {};
@@ -780,18 +801,31 @@ function Annotator(socketurl, id, userid, displayname, token) {
   this.colorPicker.on("color:init", setColor);
   this.colorPicker.on("color:change", setColor);
 
+  $('#inputStrokeWidth').val(this.strokeWidth);
+  $('#strokeWidthValue').text(this.strokeWidth);
+  $('#inputStrokeWidth').on('input', function(e) {
+    var strokeWidth = parseStrokeWidth(e.target.value);
+    this.storage.set('strokeWidth', strokeWidth);
+    this.strokeWidth = strokeWidth;
+  }.bind(this));
+
+  $('#inputStrokeWidth').on('change', function(e) {
+    var strokeWidth = parseStrokeWidth(e.target.value);
+    $('#strokeWidthValue').text(strokeWidth);
+  }.bind(this));
+
   this.userlist = $("<div class='userlist'></div>");
   $("#mainContainer").append(this.userlist);
   this.connectionError = $("#connectionError");
   this.connectingMessage = $("#connectingMessage");
 }
 
-Annotator.prototype.showColorPicker = function() {
-  $("#colorPicker").show();
+Annotator.prototype.showSettings = function() {
+  $("#settingsDialog").show();
 };
 
-Annotator.prototype.hideColorPicker = function() {
-  $("#colorPicker").hide();
+Annotator.prototype.hideSettings = function() {
+  $("#settingsDialog").hide();
 };
 
 Annotator.prototype.onDisconnect = function() {
