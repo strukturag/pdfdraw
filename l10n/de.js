@@ -18,6 +18,7 @@ OC.L10N.register(
     "https://server.domain.invalid/path/" : "https://server.domain.invalid/path/",
     "Saved" : "Gespeichert",
     "Shared secret" : "Geteiltes Geheimnis",
+    "Stroke width" : "Linienbreite",
     "Establishing connection, please wait..." : "Verbindung wird hergestellt, bitte warten...",
     "The connection is interrupted, reconnecting..." : "Die Verbindung ist unterbrochen, verbinde neu...",
     "Generating combined PDF, please wait..." : "Zusammengefügtes PDF wird erstellt, bitte warten...",
