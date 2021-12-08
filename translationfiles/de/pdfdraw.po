@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-12-07 16:43+0100\n"
+"POT-Creation-Date: 2021-12-08 14:42+0100\n"
 "PO-Revision-Date: 2021-12-07 15:44+0000\n"
 "Last-Translator: Joachim Bauch <mail@joachim-bauch.de>, 2021\n"
 "Language-Team: German (https://www.transifex.com/strukturag/teams/115058/de/)\n"
@@ -111,62 +111,66 @@ msgstr "Gespeichert"
 msgid "Shared secret"
 msgstr "Geteiltes Geheimnis"
 
-#: templates/viewer.php:53
+#: templates/viewer.php:54
+msgid "Stroke width"
+msgstr "Linienbreite"
+
+#: templates/viewer.php:61
 msgid "Establishing connection, please wait..."
 msgstr "Verbindung wird hergestellt, bitte warten..."
 
-#: templates/viewer.php:56
+#: templates/viewer.php:64
 msgid "The connection is interrupted, reconnecting..."
 msgstr "Die Verbindung ist unterbrochen, verbinde neu..."
 
-#: templates/viewer.php:59
+#: templates/viewer.php:67
 msgid "Generating combined PDF, please wait..."
 msgstr "Zusammengefügtes PDF wird erstellt, bitte warten..."
 
-#: templates/viewer.php:62
+#: templates/viewer.php:70
 msgid "PDF generation failed, please try again later."
 msgstr "PDF Erzeugung fehlgeschlagen, bitte versuchen Sie es später nochmal."
 
-#: templates/viewer.php:222 templates/viewer.php:224
+#: templates/viewer.php:230 templates/viewer.php:232
 msgid "Freehand"
 msgstr "Freihand"
 
-#: templates/viewer.php:227 templates/viewer.php:229
+#: templates/viewer.php:235 templates/viewer.php:237
 msgid "Rectangle"
 msgstr "Rechteck"
 
-#: templates/viewer.php:232 templates/viewer.php:234
+#: templates/viewer.php:240 templates/viewer.php:242
 msgid "Ellipse"
 msgstr "Ellipse"
 
-#: templates/viewer.php:237 templates/viewer.php:239
+#: templates/viewer.php:245 templates/viewer.php:247
 msgid "Line"
 msgstr "Linie"
 
-#: templates/viewer.php:289 templates/viewer.php:291
+#: templates/viewer.php:297 templates/viewer.php:299
 msgid "No tool"
 msgstr "Nichts wählen"
 
-#: templates/viewer.php:294 templates/viewer.php:296
+#: templates/viewer.php:302 templates/viewer.php:304
 msgid "Select"
 msgstr "Auswählen"
 
-#: templates/viewer.php:299 templates/viewer.php:301
+#: templates/viewer.php:307 templates/viewer.php:309
 msgid "Pointer"
 msgstr "Zeiger"
 
-#: templates/viewer.php:305 templates/viewer.php:307
+#: templates/viewer.php:313 templates/viewer.php:315
 msgid "Draw mode"
 msgstr "Zeichenmodus"
 
-#: templates/viewer.php:312 templates/viewer.php:314
+#: templates/viewer.php:320 templates/viewer.php:322
 msgid "Select color"
 msgstr "Farbe wählen"
 
-#: templates/viewer.php:317 templates/viewer.php:319
+#: templates/viewer.php:325 templates/viewer.php:327
 msgid "Download"
 msgstr "Herunterladen"
 
-#: templates/viewer.php:322 templates/viewer.php:324
+#: templates/viewer.php:330 templates/viewer.php:332
 msgid "Close"
 msgstr "Schließen"
