@@ -440,8 +440,18 @@ SelectDrawer.prototype.onItemMoved = function(page_annotator, name, item, event)
   }
 };
 
-var ColorPickerDrawer = function(annotator, previous_mode) {
+SelectDrawer.prototype.updateSettings = function() {
+  if (!this.selected_item) {
+    return;
+  }
+
+  this.selected_item.strokeColor = this.annotator.color;
+  this.selected_item.strokeWidth = this.annotator.strokeWidth;
+};
+
+var ColorPickerDrawer = function(annotator, previous_mode, selected_item) {
   BaseDrawer.apply(this, arguments);
+  this.selected_item = selected_item;
   this.annotator.showSettings();
 };
 ColorPickerDrawer.prototype = Object.create(BaseDrawer.prototype);
@@ -452,6 +462,11 @@ ColorPickerDrawer.prototype.destroy = function() {
 
 ColorPickerDrawer.prototype.onClick = function(page_annotator, event) {
   this.annotator.setDrawMode(this.previous_mode);
+  if (this.selected_item) {
+    this.annotator.drawer._select(this.selected_item);
+    this.annotator.drawer.updateSettings();
+    this.selected_item = null;
+  }
 };
 
 var Cursor = function(annotator, userid, radius) {
@@ -1081,6 +1096,10 @@ Annotator.prototype.destroyDrawer = function() {
 };
 
 Annotator.prototype.updateDrawer = function(previous_mode) {
+  var selected_item = null;
+  if (this.drawer && this.drawer instanceof SelectDrawer) {
+    selected_item = this.drawer.selected_item;
+  }
   this.destroyDrawer();
   switch (this.draw_mode) {
     case "freehand":
@@ -1099,7 +1118,7 @@ Annotator.prototype.updateDrawer = function(previous_mode) {
       this.drawer = new SelectDrawer(this, previous_mode);
       break;
     case "color":
-      this.drawer = new ColorPickerDrawer(this, previous_mode);
+      this.drawer = new ColorPickerDrawer(this, previous_mode, selected_item);
       break;
     case "line":
       this.drawer = new LineDrawer(this, previous_mode);
