@@ -31,6 +31,16 @@ translationfiles/%/pdfdraw.po: translationtool.phar pot
 l10n: translationtool.phar
 	./translationtool.phar convert-po-files
 
+check-translations: l10n
+	@out=$$(git diff l10n); \
+	if [ ! -z "$$out" ]; then \
+		echo; \
+		echo "Found unprocessed translations, need to update folder \"l10n\":"; \
+		echo; \
+		echo "$$out"; \
+		exit 1; \
+	fi
+
 npm: package.json package-lock.json
 	npm install
 
