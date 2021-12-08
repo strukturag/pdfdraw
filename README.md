@@ -66,3 +66,9 @@ will use an empty name by default (this is shown as `Anonymous` in the list).
 
 Event handlers can listen for the `OCA\PdfDraw::getDisplayName` event and update
 the `displayName` argument if they can identify the user by other means.
+
+
+## Translations
+
+Translations to other languages are done in Transifex at
+https://www.transifex.com/strukturag/pdfdraw/
