@@ -100,17 +100,28 @@
   float: left;
 }
 
-#colorPicker {
+#settingsDialog {
   display: none;
   position: absolute;
   background: rgba(0, 0, 0, 0.5);
-  left: 50%;
-  top: 50%;
+  top: 48px;
+  right: 16px;
   z-index: 10000;
   padding: 20px;
   border-radius: 20px;
-  margin-left: -160px;
-  margin-top: -160px;
+}
+
+#settingsDialog label {
+  display: block;
+  color: white;
+}
+
+.settings-field {
+  margin-top: 1em;
+}
+
+.settings-field input {
+  width: 100%;
 }
 
 .toolbarButton.close::before {
