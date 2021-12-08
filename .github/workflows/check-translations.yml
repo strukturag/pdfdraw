@@ -1,0 +1,24 @@
+name: Check translations
+
+on:
+  pull_request:
+    paths:
+      - "l10n/**"
+  push:
+    paths:
+      - "l10n/**"
+  schedule:
+    - cron: "0 2 * * SUN"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2.4.0
+
+    - name: Install dependencies
+      run: sudo apt -y update && sudo apt -y install gettext
+
+    - name: Check translations
+      run: make check-translations
