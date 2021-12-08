@@ -24,7 +24,7 @@ msgstr ""
 
 #: lib/Controller/ViewerController.php:151
 msgid "FileId is empty."
-msgstr "El campo está vacío."
+msgstr "File ID está vacío."
 
 #: lib/Controller/ViewerController.php:162
 #: lib/Controller/ViewerController.php:213
@@ -115,7 +115,7 @@ msgstr "Secreta compartida"
 
 #: templates/viewer.php:54
 msgid "Stroke width"
-msgstr "Ancho de la linea"
+msgstr "Ancho de linea"
 
 #: templates/viewer.php:61
 msgid "Establishing connection, please wait..."
