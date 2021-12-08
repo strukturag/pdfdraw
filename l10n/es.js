@@ -1,7 +1,7 @@
 OC.L10N.register(
     "pdfdraw",
     {
-    "FileId is empty." : "El campo está vacío.",
+    "FileId is empty." : "File ID está vacío.",
     "File not found." : "Archivo no encontrado.",
     "You do not have enough permissions to view the file." : "No tiene suficientes permisos para ver el archivo.",
     "Token is empty." : "El Token está vacío.",
@@ -18,7 +18,7 @@ OC.L10N.register(
     "https://server.domain.invalid/path/" : "https://server.domain.invalid/path/",
     "Saved" : "Guardado",
     "Shared secret" : "Secreta compartida",
-    "Stroke width" : "Ancho de la linea",
+    "Stroke width" : "Ancho de linea",
     "Establishing connection, please wait..." : "Estableciendo conexión, por favor espere...",
     "The connection is interrupted, reconnecting..." : "La conexión esta interrumpida, volviendo a conectar...",
     "Generating combined PDF, please wait..." : "Generando PDF combinado, por favor espere...",
