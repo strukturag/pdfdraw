@@ -80,6 +80,11 @@
   mask-image: url("../img/icon-line.svg");
 }
 
+.textMode::before {
+  -webkit-mask-image: url("../img/icon-text.svg");
+  mask-image: url("../img/icon-text.svg");
+}
+
 /*
 // Provided by viewer.css
 .toolbarButton.download::before {
@@ -251,4 +256,40 @@
   border-color: hsla(0, 0%, 0%, 0.32) hsla(0, 0%, 0%, 0.38) hsla(0, 0%, 0%, 0.42);
   /* stylelint-disable-next-line max-line-length */
   box-shadow: 0 1px 0 hsla(0, 0%, 100%, 0.05) inset, 0 0 1px hsla(0, 0%, 100%, 0.15) inset, 0 1px 0 hsla(0, 0%, 100%, 0.05);
+}
+
+.textareaContainer {
+  position: absolute !important;
+  border: none;
+  width: 300px;
+  max-width: 300px;
+}
+
+.textareaContainer textarea {
+  height: 200px;
+  max-height: 200px;
+  width: calc(100% - 2em);
+  max-width: calc(100% - 2em);
+  margin: 1em;
+  box-shadow: none;
+}
+
+.textareaContainer .deleteButton {
+  width: 20%;
+  height: 25px;
+  float: right;
+  margin-bottom: 5px;
+  font-size: 18px;
+}
+
+.textareaContainer .author {
+  display: inline-block;
+  margin-top: 12px;
+  margin-left: 12px;
+  padding: 0.5em;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-radius: 4px;
 }
