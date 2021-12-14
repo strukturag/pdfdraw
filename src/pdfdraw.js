@@ -626,18 +626,28 @@ var TextArea = function(page_annotator, text, color, author) {
   this.name = getObjectId();
   this.textareaContainer = $('<div class="textareaContainer form-group shadow-textarea"></div>');
   this.textareaContainer.draggable({
+    start: function(event, ui) {
+      if ($('textarea', this.textareaContainer).prop("disabled")) {
+        event.preventDefault();
+      }
+    }.bind(this),
     drag: function(event, ui) {
-      this.textareaContainerPos = [ui.position.left, ui.position.top];
+      this.textareaContainerPos = [
+        ui.position.left / this.page_annotator.scale,
+        ui.position.top / this.page_annotator.scale
+      ];
       this.update();
       this.sendData();
     }.bind(this),
     stop: function(event, ui) {
-      this.textareaContainerPos = [ui.position.left, ui.position.top];
+      this.textareaContainerPos = [
+        ui.position.left / this.page_annotator.scale,
+        ui.position.top / this.page_annotator.scale
+      ];
       this.update();
       this.sendData();
     }.bind(this),
   });
-  this.textareaContainer.draggable('disable');
   this.textareaContainer.on('click', function(event) {
     this.page_annotator.annotator.drawer.onClick(this.page_annotator, {
       'point': {
@@ -676,6 +686,9 @@ var TextArea = function(page_annotator, text, color, author) {
   }.bind(this));
   this.textarea.on('focus', function(e) {
     this.onFocus();
+  }.bind(this));
+  this.textarea.on('dragstart', function(e) {
+    e.preventDefault();
   }.bind(this));
   this.textareaContainer.append(this.authorLabel, this.closeButton, this.textarea);
   this.textareaContainer.css("background-color", this.color);
@@ -824,7 +837,6 @@ TextArea.prototype.onFocus = function() {
   this._selecting = true;
   $('textarea', this.textareaContainer).prop("disabled", false);
   this.closeButton.prop("disabled", false);
-  this.textareaContainer.draggable("enable");
   this.textareaContainer.css("box-shadow", "0px 0px 15px 5px"+this.color);
   this.circle.shadowColor = "black";
   this.circle.shadowBlur = 10;
@@ -1008,6 +1020,7 @@ PageAnnotator.prototype.update = function(scale) {
     (width + (this.pagewidth * (1 - scale))) / 2,
     (height + (this.pageheight * (1 - scale))) / 2);
   this.view.zoom = scale;
+  this.activate();
   each(this.textAnnotations, function(ta) {
     ta.onResized();
   });

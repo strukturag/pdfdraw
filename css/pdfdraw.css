@@ -280,9 +280,15 @@
   float: right;
   margin-bottom: 5px;
   font-size: 18px;
+  cursor: pointer;
+}
+
+.textareaContainer .deleteButton[disabled] {
+  cursor: default;
 }
 
 .textareaContainer .author {
+  cursor: default;
   display: inline-block;
   margin-top: 12px;
   margin-left: 12px;
