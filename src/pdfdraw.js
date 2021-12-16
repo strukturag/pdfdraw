@@ -130,13 +130,13 @@ Storage.prototype.set = function(key, value) {
   this.storage.setItem(this._getKey(key), value);
 };
 
-var BaseDrawer = function(annotator, previous_mode) {
+var BaseDrawer = function(annotator) {
   this.annotator = annotator;
-  this.previous_mode = previous_mode;
 };
 
 BaseDrawer.prototype.destroy = function() {};
 BaseDrawer.prototype.activate = function(page_annotator) {};
+BaseDrawer.prototype.updateSettings = function(page_annotator) {};
 BaseDrawer.prototype.onMouseDown = function(page_annotator, event) {};
 BaseDrawer.prototype.onMouseUp = function(page_annotator, event) {};
 BaseDrawer.prototype.onMouseDrag = function(page_annotator, event) {};
@@ -328,6 +328,7 @@ PointerDrawer.prototype.onMouseLeave = function(page_annotator, event) {
 var SelectDrawer = function(annotator) {
   BaseDrawer.apply(this, arguments);
   this.selected_item = null;
+  this.prev_settings = null;
   this.pending_items = {};
   this.send_interval = setInterval(this._sendPending.bind(this), 100);
 };
@@ -342,13 +343,38 @@ SelectDrawer.prototype._select = function(item) {
   this.selected_item = item;
   this.selected_item.shadowColor = "black";
   this.selected_item.shadowBlur = 10;
+  var color = item.strokeColor.toCSS(true);
+  if (item.strokeColor.hasAlpha() && color.length <= 7) {
+    color += Math.round(item.strokeColor.alpha * 255).toString(16);
+  }
+  var settings = {
+    'color': color,
+    'strokeWidth': item.strokeWidth,
+  };
+  this.prev_settings = this.annotator.updateSettings(settings);
 };
 
 SelectDrawer.prototype._unselect = function() {
+  var reset;
+  if (this.prev_settings) {
+    if (this.selected_item) {
+      reset = {
+        'strokeColor': this.selected_item.strokeColor,
+        'strokeWidth': this.selected_item.strokeWidth,
+      };
+    }
+    this.annotator.updateSettings(this.prev_settings);
+    this.prev_settings = null;
+  }
+
   if (!this.selected_item) {
     return;
   }
 
+  if (reset) {
+    this.selected_item.strokeColor = reset.strokeColor;
+    this.selected_item.strokeWidth = reset.strokeWidth;
+  }
   this.selected_item.shadowColor = null;
   this.selected_item.shadowBlur = 0;
   this.selected_item = null;
@@ -432,6 +458,10 @@ SelectDrawer.prototype.onItemMoved = function(page_annotator, name, item, event)
   event.stopPropagation();
   item.position.x += event.delta.x;
   item.position.y += event.delta.y;
+  this.addPendingItem(page_annotator, name, item);
+};
+
+SelectDrawer.prototype.addPendingItem = function(page_annotator, name, item) {
   if (this.pending_items.hasOwnProperty(name)) {
     this.pending_items[name][0] = page_annotator;
     this.pending_items[name][1] = item;
@@ -440,33 +470,19 @@ SelectDrawer.prototype.onItemMoved = function(page_annotator, name, item, event)
   }
 };
 
-SelectDrawer.prototype.updateSettings = function() {
+SelectDrawer.prototype.updateSettings = function(page_annotator) {
   if (!this.selected_item) {
+    return;
+  }
+
+  if (this.selected_item.strokeColor === this.annotator.color &&
+      this.selected_item.strokeWidth === this.annotator.strokeWidth) {
     return;
   }
 
   this.selected_item.strokeColor = this.annotator.color;
   this.selected_item.strokeWidth = this.annotator.strokeWidth;
-};
-
-var ColorPickerDrawer = function(annotator, previous_mode, selected_item) {
-  BaseDrawer.apply(this, arguments);
-  this.selected_item = selected_item;
-  this.annotator.showSettings();
-};
-ColorPickerDrawer.prototype = Object.create(BaseDrawer.prototype);
-
-ColorPickerDrawer.prototype.destroy = function() {
-  this.annotator.hideSettings();
-};
-
-ColorPickerDrawer.prototype.onClick = function(page_annotator, event) {
-  this.annotator.setDrawMode(this.previous_mode);
-  if (this.selected_item) {
-    this.annotator.drawer._select(this.selected_item);
-    this.annotator.drawer.updateSettings();
-    this.selected_item = null;
-  }
+  this.addPendingItem(page_annotator, this.selected_item.name, this.selected_item);
 };
 
 var Cursor = function(annotator, userid, radius) {
@@ -570,31 +586,31 @@ var PageAnnotator = function(annotator, pagenum, container, page) {
     var args = Array.prototype.slice.call(arguments);
     args.unshift(this);
     this.activate();
-    this.annotator.drawer.onMouseDown.apply(this.annotator.drawer, args);
+    this.annotator.e.trigger('mousedown', [args]);
   }.bind(this));
   this.view.on('mouseup', function() {
     var args = Array.prototype.slice.call(arguments);
     args.unshift(this);
     this.activate();
-    this.annotator.drawer.onMouseUp.apply(this.annotator.drawer, args);
+    this.annotator.e.trigger('mouseup', [args]);
   }.bind(this));
   this.view.on('mousedrag', function() {
     var args = Array.prototype.slice.call(arguments);
     args.unshift(this);
     this.activate();
-    this.annotator.drawer.onMouseDrag.apply(this.annotator.drawer, args);
+    this.annotator.e.trigger('mousedrag', [args]);
   }.bind(this));
   this.view.on('mouseenter', function() {
     var args = Array.prototype.slice.call(arguments);
     args.unshift(this);
     this.activate();
-    this.annotator.drawer.onMouseEnter.apply(this.annotator.drawer, args);
+    this.annotator.e.trigger('mouseenter', [args]);
   }.bind(this));
   this.view.on('mouseleave', function() {
     var args = Array.prototype.slice.call(arguments);
     args.unshift(this);
     this.activate();
-    this.annotator.drawer.onMouseLeave.apply(this.annotator.drawer, args);
+    this.annotator.e.trigger('mouseleave', [args]);
   }.bind(this));
   // Sometimes the "mouseleave" event of paper.js doesn't fire when
   // switching views, also handle "mouseleave" on the canvas itself
@@ -603,21 +619,21 @@ var PageAnnotator = function(annotator, pagenum, container, page) {
     var args = Array.prototype.slice.call(arguments);
     args.unshift(this);
     this.activate();
-    this.annotator.drawer.onMouseLeave.apply(this.annotator.drawer, args);
+    this.annotator.e.trigger('mouseleave', [args]);
   }.bind(this));
   this.view.on('mousemove', function() {
     var args = Array.prototype.slice.call(arguments);
     args.unshift(this);
     this.activate();
-    this.annotator.drawer.onMouseMove.apply(this.annotator.drawer, args);
+    this.annotator.e.trigger('mousemove', [args]);
   }.bind(this));
   this.view.on('click', function() {
     var args = Array.prototype.slice.call(arguments);
     args.unshift(this);
     this.activate();
-    this.annotator.drawer.onClick.apply(this.annotator.drawer, args);
+    this.annotator.e.trigger('click', [args]);
   }.bind(this));
-  $(window).keyup(function(event) {
+  $(window).on('keyup', function(event) {
     if (PageAnnotator.prototype.__active !== this) {
       return;
     }
@@ -625,7 +641,7 @@ var PageAnnotator = function(annotator, pagenum, container, page) {
     var args = Array.prototype.slice.call(arguments);
     args.unshift(this);
     this.activate();
-    this.annotator.drawer.onKeyUp.apply(this.annotator.drawer, args);
+    this.annotator.e.trigger('keyup', [args]);
   }.bind(this));
 };
 
@@ -753,6 +769,7 @@ function parseStrokeWidth(value) {
 }
 
 function Annotator(socketurl, id, userid, displayname, token) {
+  this.e = $({});
   this.annotators = {};
   this.cursors = {};
   this.draw_mode = null;
@@ -812,6 +829,7 @@ function Annotator(socketurl, id, userid, displayname, token) {
     this.storage.set('color', this.color);
     $(".modeButton.colorMode, .modeButton.colorMode:focus")
       .css("background-color", this.color);
+    this.drawer.updateSettings(PageAnnotator.prototype.__active);
   }.bind(this);
   this.colorPicker.on("color:init", setColor);
   this.colorPicker.on("color:change", setColor);
@@ -822,6 +840,7 @@ function Annotator(socketurl, id, userid, displayname, token) {
     var strokeWidth = parseStrokeWidth(e.target.value);
     this.storage.set('strokeWidth', strokeWidth);
     this.strokeWidth = strokeWidth;
+    this.drawer.updateSettings(PageAnnotator.prototype.__active);
   }.bind(this));
 
   $('#inputStrokeWidth').on('change', function(e) {
@@ -833,14 +852,88 @@ function Annotator(socketurl, id, userid, displayname, token) {
   $("#mainContainer").append(this.userlist);
   this.connectionError = $("#connectionError");
   this.connectingMessage = $("#connectingMessage");
+
+  this.e.on('mousedown', function(event, args) {
+    if (this.settings_open) {
+      event.preventDefault();
+      return;
+    }
+
+    this.drawer.onMouseDown.apply(this.drawer, args);
+  }.bind(this));
+  this.e.on('mouseup', function(event, args) {
+    if (this.settings_open) {
+      event.preventDefault();
+      return;
+    }
+
+    this.drawer.onMouseUp.apply(this.drawer, args);
+  }.bind(this));
+  this.e.on('mousedrag', function(event, args) {
+    if (this.settings_open) {
+      event.preventDefault();
+      return;
+    }
+
+    this.drawer.onMouseDrag.apply(this.drawer, args);
+  }.bind(this));
+  this.e.on('mouseenter', function(event, args) {
+    if (this.settings_open) {
+      event.preventDefault();
+      return;
+    }
+
+    this.drawer.onMouseEnter.apply(this.drawer, args);
+  }.bind(this));
+  this.e.on('mouseleave', function(event, args) {
+    if (this.settings_open) {
+      event.preventDefault();
+      return;
+    }
+
+    this.drawer.onMouseLeave.apply(this.drawer, args);
+  }.bind(this));
+  this.e.on('mousemove', function(event, args) {
+    if (this.settings_open) {
+      event.preventDefault();
+      return;
+    }
+
+    this.drawer.onMouseMove.apply(this.drawer, args);
+  }.bind(this));
+  this.e.on('keyup', function(event, args) {
+    if (this.settings_open) {
+      event.preventDefault();
+      return;
+    }
+
+    this.drawer.onKeyUp.apply(this.drawer, args);
+  }.bind(this));
+  this.e.on('click', function(event, args) {
+    if (this.settings_open) {
+      this.drawer.updateSettings(args[0]);
+      this.toggleSettings();
+      return;
+    }
+
+    this.drawer.onClick.apply(this.drawer, args);
+  }.bind(this));
 }
 
-Annotator.prototype.showSettings = function() {
-  $("#settingsDialog").show();
+Annotator.prototype.updateSettings = function(settings) {
+  var prev = {
+    'color': this.colorPicker.color.hex8String,
+    'strokeWidth': this.strokeWidth,
+  };
+  this.colorPicker.color.hex8String = settings.color;
+  $('#inputStrokeWidth').val(settings.strokeWidth);
+  $('#strokeWidthValue').text($('#inputStrokeWidth').val());
+  return prev;
 };
 
-Annotator.prototype.hideSettings = function() {
-  $("#settingsDialog").hide();
+Annotator.prototype.toggleSettings = function() {
+  $("#settingsDialog").toggle();
+  this.settings_open = !this.settings_open;
 };
 
 Annotator.prototype.onDisconnect = function() {
@@ -1095,52 +1188,7 @@ Annotator.prototype.destroyDrawer = function() {
   }
 };
 
-Annotator.prototype.updateDrawer = function(previous_mode) {
-  var selected_item = null;
-  if (this.drawer && this.drawer instanceof SelectDrawer) {
-    selected_item = this.drawer.selected_item;
-  }
-  this.destroyDrawer();
-  switch (this.draw_mode) {
-    case "freehand":
-      this.drawer = new FreehandDrawer(this, previous_mode);
-      break;
-    case "rectangle":
-      this.drawer = new RectangleDrawer(this, previous_mode);
-      break;
-    case "ellipse":
-      this.drawer = new EllipseDrawer(this, previous_mode);
-      break;
-    case "pointer":
-      this.drawer = new PointerDrawer(this, previous_mode);
-      break;
-    case "select":
-      this.drawer = new SelectDrawer(this, previous_mode);
-      break;
-    case "color":
-      this.drawer = new ColorPickerDrawer(this, previous_mode, selected_item);
-      break;
-    case "line":
-      this.drawer = new LineDrawer(this, previous_mode);
-      break;
-    case null:
-      break;
-    default:
-      console.log("Unknown draw mode", this.draw_mode);
-      return;
-  }
-};
-
 Annotator.prototype.setDrawMode = function(mode) {
-  if (this.draw_mode === mode) {
-    if (mode === "color") {
-      // Toggle back from color picker.
-      this.setDrawMode(this.drawer.previous_mode);
-    }
-    return;
-  }
-
-  var previous_mode = this.draw_mode;
   $(".toolbarButton.selected").removeClass('selected');
   this.draw_mode = mode;
   $("#" + (mode || "none") + "Mode").addClass('selected');
@@ -1154,7 +1202,33 @@ Annotator.prototype.setDrawMode = function(mode) {
       $("#drawModeToolbar").addClass('selected');
       break;
   }
-  this.updateDrawer(previous_mode);
+
+  this.destroyDrawer();
+  switch (this.draw_mode) {
+    case "freehand":
+      this.drawer = new FreehandDrawer(this);
+      break;
+    case "rectangle":
+      this.drawer = new RectangleDrawer(this);
+      break;
+    case "ellipse":
+      this.drawer = new EllipseDrawer(this);
+      break;
+    case "pointer":
+      this.drawer = new PointerDrawer(this);
+      break;
+    case "select":
+      this.drawer = new SelectDrawer(this);
+      break;
+    case "line":
+      this.drawer = new LineDrawer(this);
+      break;
+    case null:
+      break;
+    default:
+      console.log("Unknown draw mode", this.draw_mode);
+      return;
+  }
 };
 
 Annotator.prototype.switchPage = function(pagenum) {
@@ -1424,7 +1498,12 @@ $(document).ready(function() {
 
   $(".modeButton").click(function(event) {
     var button = $(event.target);
-    annotator.setDrawMode(button.data("mode") || null);
+    var mode = button.data("mode") || null;
+    if (mode === "color") {
+      annotator.toggleSettings();
+    } else {
+      annotator.setDrawMode(mode);
+    }
   });
 
   var $btnDrawMode = $(".toolbarButton.drawMode");
