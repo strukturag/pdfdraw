@@ -924,6 +924,7 @@ var PageAnnotator = function(annotator, pagenum, container, page) {
   this.canvas.style.bottom = 0;
   this.scope = new paper.PaperScope();
   this.scope.setup(this.canvas);
+  this.scope.project.options.hitTolerance = 5;
   if (page) {
     this.setPage(page, container);
   }
