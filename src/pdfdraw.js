@@ -351,23 +351,26 @@ SelectDrawer.prototype._select = function(item) {
   } else {
     this.selected_item.shadowColor = "black";
     this.selected_item.shadowBlur = 10;
-
-    var color = item.strokeColor.toCSS(true);
-    if (item.strokeColor.hasAlpha() && color.length <= 7) {
-      color += Math.round(item.strokeColor.alpha * 255).toString(16);
-    }
-    var settings = {
-      'color': color,
-      'strokeWidth': item.strokeWidth,
-    };
-    this.prev_settings = this.annotator.updateSettings(settings);
   }
+
+  var color = this.selected_item.strokeColor;
+  if (typeof(color) !== 'string') {
+    color = color.toCSS(true);
+    if (this.selected_item.strokeColor.hasAlpha() && color.length <= 7) {
+      color += Math.round(this.selected_item.strokeColor.alpha * 255).toString(16);
+    }
+  }
+  var settings = {
+    'color': color,
+    'strokeWidth': this.selected_item.strokeWidth,
+  };
+  this.prev_settings = this.annotator.updateSettings(settings);
 };
 
 SelectDrawer.prototype._unselect = function() {
   var reset;
   if (this.prev_settings) {
-    if (this.selected_item && !this.selected_item.onBlur) {
+    if (this.selected_item) {
       reset = {
         'strokeColor': this.selected_item.strokeColor,
         'strokeWidth': this.selected_item.strokeWidth,
@@ -384,12 +387,12 @@ SelectDrawer.prototype._unselect = function() {
   if (this.selected_item.onBlur) {
     this.selected_item.onBlur();
   } else {
-    if (reset) {
-      this.selected_item.strokeColor = reset.strokeColor;
-      this.selected_item.strokeWidth = reset.strokeWidth;
-    }
     this.selected_item.shadowColor = null;
     this.selected_item.shadowBlur = 0;
+  }
+  if (reset) {
+    this.selected_item.strokeColor = reset.strokeColor;
+    this.selected_item.strokeWidth = reset.strokeWidth;
   }
   this.selected_item = null;
 };
@@ -719,6 +722,39 @@ TextArea.prototype.exportJSON = function() {
   return JSON.stringify(data);
 };
 
+Object.defineProperty(TextArea.prototype, 'strokeColor', {
+  "get": function() {
+    return this.color;
+  },
+  "set": function(value) {
+    if (this.color === value) {
+      return;
+    }
+
+    this.color = value;
+    this.textareaContainer.css("background-color", this.color);
+    if (!$('textarea', this.textareaContainer).prop("disabled")) {
+      this.textareaContainer.css("box-shadow", "0px 0px 15px 5px"+this.color);
+    }
+    this.authorLabel.css('background-color', this.color);
+    if (this.circle) {
+      this.circle.fillColor = value;
+    }
+    if (this.line) {
+      this.line.strokeColor = value;
+    }
+  },
+});
+
+Object.defineProperty(TextArea.prototype, 'strokeWidth', {
+  "get": function() {
+    return this.page_annotator.annotator.strokeWidth;
+  },
+  "set": function(value) {
+    // Not supported by text annotations.
+  },
+});
+
 TextArea.prototype.sendData = function() {
   this._sendData();
 };
@@ -779,6 +815,7 @@ TextArea.prototype.update = function(page_annotator) {
   this.authorLabel.css('background-color', this.color);
   this.textareaContainer.css('left', this.textareaContainerPos[0]*this.page_annotator.scale);
   this.textareaContainer.css('top', this.textareaContainerPos[1]*this.page_annotator.scale);
+  this.textareaContainer.css("background-color", this.color);
   this.textarea.css("font-size", this.page_annotator.annotator.fontSize+"px");
   this.textarea.val(this.content);
   if (this.line) {
