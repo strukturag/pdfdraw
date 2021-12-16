@@ -7,6 +7,7 @@
 	"scripts": {
 		"build": "NODE_ENV=production webpack --progress --config webpack.js",
 		"dev": "NODE_ENV=development webpack --config webpack.js",
+		"watch": "NODE_ENV=development webpack watch --config webpack.js",
 		"lint": "eslint src",
 		"stylelint": "stylelint css/*.css css/*.scss"
 	},
