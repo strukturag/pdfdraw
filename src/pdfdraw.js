@@ -812,6 +812,7 @@ TextArea.prototype.drawCircle = function() {
 
 TextArea.prototype.update = function(page_annotator) {
   this.authorLabel.text(this.author || 'Anonymous');
+  this.authorLabel.attr('title', this.author || 'Anonymous');
   this.authorLabel.css('background-color', this.color);
   this.textareaContainer.css('left', this.textareaContainerPos[0]*this.page_annotator.scale);
   this.textareaContainer.css('top', this.textareaContainerPos[1]*this.page_annotator.scale);
