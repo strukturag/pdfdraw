@@ -829,7 +829,9 @@ function Annotator(socketurl, id, userid, displayname, token) {
     this.storage.set('color', this.color);
     $(".modeButton.colorMode, .modeButton.colorMode:focus")
       .css("background-color", this.color);
-    this.drawer.updateSettings(PageAnnotator.prototype.__active);
+    if (!this._updating_settings) {
+      this.drawer.updateSettings(PageAnnotator.prototype.__active);
+    }
   }.bind(this);
   this.colorPicker.on("color:init", setColor);
   this.colorPicker.on("color:change", setColor);
@@ -840,7 +842,9 @@ function Annotator(socketurl, id, userid, displayname, token) {
     var strokeWidth = parseStrokeWidth(e.target.value);
     this.storage.set('strokeWidth', strokeWidth);
     this.strokeWidth = strokeWidth;
-    this.drawer.updateSettings(PageAnnotator.prototype.__active);
+    if (!this._updating_settings) {
+      this.drawer.updateSettings(PageAnnotator.prototype.__active);
+    }
   }.bind(this));
 
   $('#inputStrokeWidth').on('change', function(e) {
@@ -921,6 +925,7 @@ function Annotator(socketurl, id, userid, displayname, token) {
 }
 
 Annotator.prototype.updateSettings = function(settings) {
+  this._updating_settings = true;
   var prev = {
     'color': this.colorPicker.color.hex8String,
     'strokeWidth': this.strokeWidth,
@@ -928,6 +933,7 @@ Annotator.prototype.updateSettings = function(settings) {
   this.colorPicker.color.hex8String = settings.color;
   $('#inputStrokeWidth').val(settings.strokeWidth);
   $('#strokeWidthValue').text($('#inputStrokeWidth').val());
+  this._updating_settings = false;
   return prev;
 };
 
