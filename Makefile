@@ -42,7 +42,7 @@ check-translations: l10n
 	fi
 
 npm: package.json package-lock.json
-	npm install
+	npm ci
 
 build: npm
 	npm run build
