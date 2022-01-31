@@ -195,6 +195,9 @@ See https://github.com/adobe-type-tools/cmap-resources
 
             <div class="horizontalToolbarSeparator"></div>
 
+            <button id="scrollPage" class="secondaryToolbarButton scrollModeButtons scrollPage" title="Use Page Scrolling" tabindex="62" data-l10n-id="scroll_page">
+              <span data-l10n-id="scroll_page_label">Page Scrolling</span>
+            </button>
             <button id="scrollVertical" class="secondaryToolbarButton scrollModeButtons scrollVertical toggled" title="Use Vertical Scrolling" tabindex="62" data-l10n-id="scroll_vertical">
               <span data-l10n-id="scroll_vertical_label">Vertical Scrolling</span>
             </button>
