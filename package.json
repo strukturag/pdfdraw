@@ -13,7 +13,7 @@
 	},
 	"dependencies": {
 		"@jaames/iro": "5.5.2",
-		"jquery": "3.5.0",
+		"jquery": "3.6.0",
 		"paper": "0.12.15",
 		"pdfjs-dist": "2.12.313",
 		"pdfjs-dist-viewer-min": "2.12.313",
