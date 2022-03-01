@@ -21,6 +21,8 @@
  */
 
 import $ from 'jquery';
+import 'jquery-ui/ui/widgets/draggable';
+import { each, throttle } from 'lodash';
 import io from 'socket.io-client';
 import iro from '@jaames/iro';
 import paper from 'paper';
@@ -145,7 +147,7 @@ BaseDrawer.prototype.onMouseLeave = function(page_annotator, event) {};
 BaseDrawer.prototype.onMouseMove = function(page_annotator, event) {};
 BaseDrawer.prototype.onClick = function(page_annotator, event) {};
 BaseDrawer.prototype.onKeyUp = function(page_annotator, event) {};
-BaseDrawer.prototype.onItemMoved = function(page_annotator, name, item, event) {};
+BaseDrawer.prototype.onItemMoved = function(page_annotator, item, event) {};
 
 var NullDrawer = function() {
   BaseDrawer.apply(this, arguments);
@@ -341,15 +343,26 @@ SelectDrawer.prototype._select = function(item) {
 
   this._unselect();
   this.selected_item = item;
-  this.selected_item.shadowColor = "black";
-  this.selected_item.shadowBlur = 10;
-  var color = item.strokeColor.toCSS(true);
-  if (item.strokeColor.hasAlpha() && color.length <= 7) {
-    color += Math.round(item.strokeColor.alpha * 255).toString(16);
+  if (this.selected_item.onFocus) {
+    var result = this.selected_item.onFocus();
+    if (result) {
+      this.selected_item = result;
+    }
+  } else {
+    this.selected_item.shadowColor = "black";
+    this.selected_item.shadowBlur = 10;
+  }
+
+  var color = this.selected_item.strokeColor;
+  if (typeof(color) !== 'string') {
+    color = color.toCSS(true);
+    if (this.selected_item.strokeColor.hasAlpha() && color.length <= 7) {
+      color += Math.round(this.selected_item.strokeColor.alpha * 255).toString(16);
+    }
   }
   var settings = {
     'color': color,
-    'strokeWidth': item.strokeWidth,
+    'strokeWidth': this.selected_item.strokeWidth,
   };
   this.prev_settings = this.annotator.updateSettings(settings);
 };
@@ -371,12 +384,16 @@ SelectDrawer.prototype._unselect = function() {
     return;
   }
 
+  if (this.selected_item.onBlur) {
+    this.selected_item.onBlur();
+  } else {
+    this.selected_item.shadowColor = null;
+    this.selected_item.shadowBlur = 0;
+  }
   if (reset) {
     this.selected_item.strokeColor = reset.strokeColor;
     this.selected_item.strokeWidth = reset.strokeWidth;
   }
-  this.selected_item.shadowColor = null;
-  this.selected_item.shadowBlur = 0;
   this.selected_item = null;
 };
 
@@ -418,24 +435,39 @@ SelectDrawer.prototype.destroy = function() {
   this._unselect();
 };
 
-SelectDrawer.prototype.onMouseDown = function(page_annotator, event) {
-  var hit = page_annotator.scope.project.hitTest(event.point);
+SelectDrawer.prototype._hitItem = function(page_annotator, point) {
+  var hit = page_annotator.scope.project.hitTest(point);
   if (!hit) {
-    this._unselect();
-    return;
+    // Check if user clicked on a text annotation.
+    each(page_annotator.textAnnotations, function(ta) {
+      var elem = ta.textareaContainer;
+      if (!elem.is(':visible')) {
+        return;
+      }
+
+      var rect = elem[0].getBoundingClientRect();
+      if (rect.left <= point.x && rect.right >= point.x &&
+          rect.top <= point.y && rect.bottom >= point.y) {
+        hit = {
+          "item": ta,
+        };
+      }
+    });
+    if (!hit) {
+      this._unselect();
+      return;
+    }
   }
 
   this._select(hit.item);
 };
 
-SelectDrawer.prototype.onClick = function(page_annotator, event) {
-  var hit = page_annotator.scope.project.hitTest(event.point);
-  if (!hit) {
-    this._unselect();
-    return;
-  }
+SelectDrawer.prototype.onMouseDown = function(page_annotator, event) {
+  this._hitItem(page_annotator, event.point);
+};
 
-  this._select(hit.item);
+SelectDrawer.prototype.onClick = function(page_annotator, event) {
+  this._hitItem(page_annotator, event.point);
 };
 
 SelectDrawer.prototype.onKeyUp = function(page_annotator, event) {
@@ -443,30 +475,35 @@ SelectDrawer.prototype.onKeyUp = function(page_annotator, event) {
     return;
   }
 
+  if (this.selected_item.ignoreKeyUp && this.selected_item.ignoreKeyUp()) {
+    return;
+  }
+
   switch (event.keyCode) {
     case 8: // Backspace
       // Fallthrough
     case 46: // Delete key
-      this.annotator.deleteItem(page_annotator, this.selected_item);
-      this.selected_item.remove();
+      var item = this.selected_item;
+      this.annotator.deleteItem(page_annotator, item);
       this._unselect();
+      item.remove();
       break;
   }
 };
 
-SelectDrawer.prototype.onItemMoved = function(page_annotator, name, item, event) {
+SelectDrawer.prototype.onItemMoved = function(page_annotator, item, event) {
   event.stopPropagation();
   item.position.x += event.delta.x;
   item.position.y += event.delta.y;
-  this.addPendingItem(page_annotator, name, item);
+  this.addPendingItem(page_annotator, item);
 };
 
-SelectDrawer.prototype.addPendingItem = function(page_annotator, name, item) {
-  if (this.pending_items.hasOwnProperty(name)) {
-    this.pending_items[name][0] = page_annotator;
-    this.pending_items[name][1] = item;
+SelectDrawer.prototype.addPendingItem = function(page_annotator, item) {
+  if (this.pending_items.hasOwnProperty(item.name)) {
+    this.pending_items[item.name][0] = page_annotator;
+    this.pending_items[item.name][1] = item;
   } else {
-    this.pending_items[name] = [page_annotator, item, Date.now()];
+    this.pending_items[item.name] = [page_annotator, item, Date.now()];
   }
 };
 
@@ -482,7 +519,25 @@ SelectDrawer.prototype.updateSettings = function(page_annotator) {
 
   this.selected_item.strokeColor = this.annotator.color;
   this.selected_item.strokeWidth = this.annotator.strokeWidth;
-  this.addPendingItem(page_annotator, this.selected_item.name, this.selected_item);
+  this.addPendingItem(page_annotator, this.selected_item);
+};
+
+var TextDrawer = function(annotator)  {
+  BaseDrawer.apply(this, arguments);
+};
+TextDrawer.prototype = Object.create(BaseDrawer.prototype);
+
+TextDrawer.prototype.onClick = function(page_annotator, event) {
+  var author = this.annotator.displayname;
+  var textarea = page_annotator.createTextArea({
+    'x': event.point.x,
+    'y': event.point.y,
+    'author': author,
+  });
+  textarea.sendData();
+  textarea.onFocus();
+  textarea.textarea.trigger('focus');
+  this.annotator.setDrawMode("select");
 };
 
 var Cursor = function(annotator, userid, radius) {
@@ -522,6 +577,7 @@ Cursor.prototype.draw = function(page_annotator, x, y, color, text) {
   if (!this.circle) {
     page_annotator.activate();
     this.circle = new paper.Path.Circle(center, this.radius);
+    this.circle.name = getObjectId();
   }
   if (!this.page_annotator) {
     this.page_annotator = page_annotator;
@@ -564,12 +620,303 @@ Cursor.prototype.update = function() {
   this.label.css('top', y - (this.radius));
 };
 
+var TextArea = function(page_annotator, text, color, author) {
+  this.page_annotator = page_annotator;
+  this.content = text;
+  this.color = color;
+  this.author = author;
+  this.modified = Math.round((new Date()).getTime() / 1000);
+  this.name = getObjectId();
+  this.textareaContainer = $('<div class="textareaContainer form-group shadow-textarea"></div>');
+  this.textareaContainer.draggable({
+    start: function(event, ui) {
+      if ($('textarea', this.textareaContainer).prop("disabled")) {
+        event.preventDefault();
+      }
+    }.bind(this),
+    drag: function(event, ui) {
+      this.textareaContainerPos = [
+        ui.position.left / this.page_annotator.scale,
+        ui.position.top / this.page_annotator.scale
+      ];
+      this.update();
+      this.sendData();
+    }.bind(this),
+    stop: function(event, ui) {
+      this.textareaContainerPos = [
+        ui.position.left / this.page_annotator.scale,
+        ui.position.top / this.page_annotator.scale
+      ];
+      this.update();
+      this.sendData();
+    }.bind(this),
+  });
+  this.textareaContainer.on('click', function(event) {
+    this.page_annotator.annotator.drawer.onClick(this.page_annotator, {
+      'point': {
+        'x': event.originalEvent.clientX,
+        'y': event.originalEvent.clientY,
+      },
+    });
+  }.bind(this));
+  this.textareaContainer.on('mouseup', function(event) {
+    this.page_annotator.annotator.drawer.onMouseUp(this.page_annotator, {
+      'point': {
+        'x': event.originalEvent.clientX,
+        'y': event.originalEvent.clientY,
+      },
+    });
+  }.bind(this));
+  this.page_annotator.container.append(this.textareaContainer);
+  this.circle = null;
+  this.line = null;
+  this.textarea = $('<textarea class="form-control" disabled="disabled"></textarea>');
+  this.authorLabel = $('<span class="author"</span>');
+  this.closeButton = $('<button type="button" disabled="disabled" class="deleteButton btn btn-danger form-control close" aria-label="Close"> <span aria-hidden="true">&times;</span></button>');
+  this.closeButton.on('click', function() {
+    this.textareaContainer.hide();
+    this.update();
+  }.bind(this));
+  this.textarea.on('input', function(e) {
+    if (this.content === this.textarea.val()) {
+      return;
+    }
+    this.content = this.textarea.val();
+    this.author = this.page_annotator.annotator.displayname;
+    this.modified = Math.round((new Date()).getTime() / 1000);
+    this.update();
+    this.sendData();
+  }.bind(this));
+  this.textarea.on('focus', function(e) {
+    this.onFocus();
+  }.bind(this));
+  this.textarea.on('dragstart', function(e) {
+    e.preventDefault();
+  }.bind(this));
+  this.textareaContainer.append(this.authorLabel, this.closeButton, this.textarea);
+  this.textareaContainer.css("background-color", this.color);
+  this.textarea.css("font-size", this.page_annotator.annotator.fontSize+"px");
+
+  this._sendData = throttle(function() {
+    this.page_annotator.annotator.sendItem(this.page_annotator, this);
+  }.bind(this), 250);
+};
+
+TextArea.prototype.exportJSON = function() {
+  var data = {
+    "type": "text-annotation",
+    "anchor": [
+      this.circle.position.x,
+      this.circle.position.y,
+    ],
+    "author": this.author,
+    "color": this.color,
+    "content": this.content,
+    "modified": this.modified,
+    "pos": [
+      this.textareaContainerPos[0] / this.page_annotator.scale,
+      this.textareaContainerPos[1] / this.page_annotator.scale,
+    ],
+  };
+
+  return JSON.stringify(data);
+};
+
+Object.defineProperty(TextArea.prototype, 'strokeColor', {
+  "get": function() {
+    return this.color;
+  },
+  "set": function(value) {
+    if (this.color === value) {
+      return;
+    }
+
+    this.color = value;
+    this.textareaContainer.css("background-color", this.color);
+    if (!$('textarea', this.textareaContainer).prop("disabled")) {
+      this.textareaContainer.css("box-shadow", "0px 0px 15px 5px"+this.color);
+    }
+    this.authorLabel.css('background-color', this.color);
+    if (this.circle) {
+      this.circle.fillColor = value;
+    }
+    if (this.line) {
+      this.line.strokeColor = value;
+    }
+  },
+});
+
+Object.defineProperty(TextArea.prototype, 'strokeWidth', {
+  "get": function() {
+    return this.page_annotator.annotator.strokeWidth;
+  },
+  "set": function(value) {
+    // Not supported by text annotations.
+  },
+});
+
+TextArea.prototype.sendData = function() {
+  this._sendData();
+};
+
+TextArea.prototype.draw = function(x, y) {
+  this.x = x;
+  this.y = y;
+  if (!this.circle) {
+    this.drawCircle();
+  }
+  if (!this.textareaContainerPos) {
+    this.textareaContainerPos = [x, y];
+  }
+  this.update();
+};
+
+TextArea.prototype.drawCircle = function() {
+  var center = new paper.Point(this.x, this.y);
+  var circle = new paper.Path.Circle(center, 10);
+  circle.name = this.name+"pointer";
+  circle.set({
+    fillColor: this.color,
+    shadowColor: this.color,
+    shadowBlur: 2,
+    position: center
+  });
+
+  circle.onClick = function(e) {
+    this.textareaContainer.show();
+    this.textarea.trigger('blur');
+    this.update();
+  }.bind(this);
+  circle.onFocus = function() {
+    this.onFocus();
+    return this;
+  }.bind(this);
+  circle.onBlur = function() {
+    this.onBlur();
+    return this;
+  }.bind(this);
+  circle.onMouseDrag = function(event) {
+    event.stopPropagation();
+    this.textarea.trigger('blur');
+    this.circle.position.x += event.delta.x;
+    this.circle.position.y += event.delta.y;
+    this.update();
+    this.sendData();
+  }.bind(this);
+  circle.onMouseUp = function(event) {
+    this.update();
+    this.sendData();
+  }.bind(this);
+  this.circle = circle;
+};
+
+TextArea.prototype.update = function(page_annotator) {
+  this.authorLabel.text(this.author || 'Anonymous');
+  this.authorLabel.attr('title', this.author || 'Anonymous');
+  this.authorLabel.css('background-color', this.color);
+  this.textareaContainer.css('left', this.textareaContainerPos[0]*this.page_annotator.scale);
+  this.textareaContainer.css('top', this.textareaContainerPos[1]*this.page_annotator.scale);
+  this.textareaContainer.css("background-color", this.color);
+  this.textarea.css("font-size", this.page_annotator.annotator.fontSize+"px");
+  this.textarea.val(this.content);
+  if (this.line) {
+    this.line.remove();
+    this.line = null;
+  }
+  if (this.textareaContainer.is(':visible')) {
+    var from = new paper.Point(
+      this.circle.position.x,
+      this.circle.position.y);
+    var to = new paper.Point(
+      this.textareaContainerPos[0],
+      this.textareaContainerPos[1]);
+    this.line = new paper.Path.Line(from, to);
+    this.line.strokeColor = this.color;
+    this.line.strokeWidth = 2;
+    if (!$('textarea', this.textareaContainer).prop("disabled")) {
+      this.line.shadowColor = "black";
+      this.line.shadowBlur = 5;
+    }
+    this.line.onFocus = function() {
+      this.onFocus();
+      return this;
+    }.bind(this);
+    this.line.onBlur = function() {
+      this.onBlur();
+      return this;
+    }.bind(this);
+  }
+};
+
+TextArea.prototype.remove = function() {
+  this.circle.remove();
+  if (this.line) {
+    this.line.remove();
+  }
+  this.textareaContainer.remove();
+  delete this.page_annotator.textAnnotations[this.name];
+};
+
+TextArea.prototype.ignoreKeyUp = function() {
+  if (this.textarea.is(':focus')) {
+    // The textarea currently is focused, ignore keypresses in drawer,
+    // otherwise the element gets deleted when the user presses "delete".
+    return true;
+  }
+
+  return false;
+};
+
+TextArea.prototype.onFocus = function() {
+  if (this._selecting) {
+    return;
+  }
+
+  this._selecting = true;
+  $('textarea', this.textareaContainer).prop("disabled", false);
+  this.closeButton.prop("disabled", false);
+  this.textareaContainer.css("box-shadow", "0px 0px 15px 5px"+this.color);
+  this.circle.shadowColor = "black";
+  this.circle.shadowBlur = 10;
+  if (this.line) {
+    this.line.shadowColor = "black";
+    this.line.shadowBlur = 5;
+  }
+  this._selecting = false;
+};
+
+TextArea.prototype.onBlur = function() {
+  if (this._unselecting) {
+    return;
+  }
+
+  this._unselecting = true;
+  $('textarea', this.textareaContainer).prop("disabled", true);
+  this.closeButton.prop("disabled", true);
+  this.textareaContainer.draggable("disable");
+  this.textareaContainer.css("box-shadow", "none");
+  this.circle.shadowColor = null;
+  this.circle.shadowBlur = 0;
+  if (this.line) {
+    this.line.shadowColor = null;
+    this.line.shadowBlur = 0;
+  }
+  this.textarea.trigger('blur');
+  this._unselecting = false;
+};
+
+TextArea.prototype.onResized = function(scale) {
+  this.page_annotator.container.append(this.textareaContainer);
+  this.draw(this.x, this.y);
+};
+
 var PageAnnotator = function(annotator, pagenum, container, page) {
   this.annotator = annotator;
   this.pagenum = pagenum;
   this.container = container;
   this.page = page;
   this.pending_activation = {};
+  this.textAnnotations = {};
   this.canvas = document.createElement("canvas");
   this.canvas.style.position = "absolute";
   this.canvas.style.left = 0;
@@ -578,6 +925,7 @@ var PageAnnotator = function(annotator, pagenum, container, page) {
   this.canvas.style.bottom = 0;
   this.scope = new paper.PaperScope();
   this.scope.setup(this.canvas);
+  this.scope.project.options.hitTolerance = 5;
   if (page) {
     this.setPage(page, container);
   }
@@ -645,6 +993,28 @@ var PageAnnotator = function(annotator, pagenum, container, page) {
   }.bind(this));
 };
 
+PageAnnotator.prototype.exportSVG = function() {
+  // Hide circle and line for text annotations so they don't show up in exported PDFs.
+  each(this.textAnnotations, function(ta) {
+    ta.circle.remove();
+    if (ta.line) {
+      ta.line.remove();
+    }
+  }.bind(this));
+
+  var svg = this.scope.project.exportSVG({
+    asString: true
+  });
+
+  each(this.textAnnotations, function(ta) {
+    this.scope.project.activeLayer.addChild(ta.circle);
+    if (ta.line) {
+      this.scope.project.activeLayer.addChild(ta.line);
+    }
+  }.bind(this));
+  return svg;
+};
+
 PageAnnotator.prototype.activate = function() {
   PageAnnotator.prototype.__active = this;
   for (var drawerName in this.pending_activation) {
@@ -689,6 +1059,10 @@ PageAnnotator.prototype.update = function(scale) {
     (width + (this.pagewidth * (1 - scale))) / 2,
     (height + (this.pageheight * (1 - scale))) / 2);
   this.view.zoom = scale;
+  this.activate();
+  each(this.textAnnotations, function(ta) {
+    ta.onResized();
+  });
   this.view._needsUpdate = true;
   this.view.requestUpdate();
 };
@@ -696,7 +1070,7 @@ PageAnnotator.prototype.update = function(scale) {
 PageAnnotator.prototype.createPath = function(options) {
   var path = new paper.Path(options || {});
   path.onMouseDrag = function(event) {
-    this.annotator.drawer.onItemMoved(this, path.name, path, event);
+    this.annotator.drawer.onItemMoved(this, path, event);
   }.bind(this);
   return path;
 };
@@ -705,7 +1079,7 @@ PageAnnotator.prototype.createRectangle = function(options) {
   var rect = new paper.Path.Rectangle(options || {});
   rect.onMouseDrag = function(event) {
     if (rect.ready) {
-      this.annotator.drawer.onItemMoved(this, rect.name, rect, event);
+      this.annotator.drawer.onItemMoved(this, rect, event);
     }
   }.bind(this);
   return rect;
@@ -723,10 +1097,32 @@ PageAnnotator.prototype.createEllipse = function(options) {
   ellipse.name = options.name;
   ellipse.onMouseDrag = function(event) {
     if (ellipse.ready) {
-      this.annotator.drawer.onItemMoved(this, ellipse.name, ellipse, event);
+      this.annotator.drawer.onItemMoved(this, ellipse, event);
     }
   }.bind(this);
   return ellipse;
+};
+
+PageAnnotator.prototype.createTextArea = function(options) {
+  var text = options.text || "";
+  var color = options.color || this.annotator.color;
+  var author = options.author || "";
+  var textarea = new TextArea(this, text, color, author);
+  if (options.name) {
+    textarea.name = options.name;
+  }
+  if (options.modified) {
+    textarea.modified = options.modified;
+  }
+  this.textAnnotations[textarea.name] = textarea;
+  textarea.draw(options.x, options.y);
+  if (options.anchor && textarea.circle) {
+    textarea.circle.position = {
+      x: options.anchor[0],
+      y: options.anchor[1],
+    };
+  }
+  return textarea;
 };
 
 PageAnnotator.prototype.drawItem = function(name, data) {
@@ -745,6 +1141,36 @@ PageAnnotator.prototype.drawItem = function(name, data) {
     return;
   }
   path.name = name;
+};
+
+PageAnnotator.prototype.drawTextAnnotation = function(userid, name, data) {
+  this.activate();
+  var textarea;
+  if (this.textAnnotations.hasOwnProperty(name)) {
+    textarea = this.textAnnotations[name];
+    textarea.author = data.author;
+    textarea.modified = data.modified;
+    textarea.color = data.color;
+    textarea.content = data.content;
+    textarea.circle.position = {
+      x: Math.max(0, data.anchor[0]),
+      y: Math.max(0, data.anchor[1]),
+    };
+    textarea.draw(data.pos[0], data.pos[1]);
+  } else {
+    textarea = this.createTextArea({
+      'x': data.pos[0],
+      'y': data.pos[1],
+      'text': data.content,
+      'color': data.color,
+      'name': name,
+      'anchor': data.anchor,
+      'author': data.author,
+      'modified': data.modified,
+    });
+  }
+  textarea.update();
+  return textarea;
 };
 
 PageAnnotator.prototype.deleteItem = function(name) {
@@ -793,6 +1219,7 @@ function Annotator(socketurl, id, userid, displayname, token) {
     strokeWidth = parseStrokeWidth(strokeWidth);
   }
   this.strokeWidth = strokeWidth;
+  this.fontSize = 12;
   this.pageCount = -1;
   this.currentPage = null;
   this.users = {};
@@ -1229,6 +1656,9 @@ Annotator.prototype.setDrawMode = function(mode) {
     case "line":
       this.drawer = new LineDrawer(this);
       break;
+    case "text":
+      this.drawer = new TextDrawer(this);
+      break;
     case null:
       break;
     default:
@@ -1285,7 +1715,17 @@ Annotator.prototype.processCursorMessage = function(userid, message) {
 };
 
 Annotator.prototype.processItemMessage = function(userid, message) {
+  if (typeof message.data === "string") {
+    message.data = JSON.parse(message.data);
+  }
+
   this.getPage(message.page).then(function(page_annotator) {
+    switch (message.data.type) {
+      case "text-annotation":
+        page_annotator.drawTextAnnotation(userid, message.name, message.data);
+        return;
+    }
+
     page_annotator.drawItem(message.name, message.data);
   });
 };
@@ -1331,12 +1771,11 @@ Annotator.prototype.exportSVG = function() {
       if (result.length < this.pageCount) {
         var page = pages[result.length + 1];
         if (page) {
-          var svg = page.scope.project.exportSVG({
-            asString: true
-          });
+          var svg = page.exportSVG();
           result.push(svg);
         }
       }
+
       return resolve(result);
     }.bind(this);
 
@@ -1346,9 +1785,7 @@ Annotator.prototype.exportSVG = function() {
         pages[pagenum] = page_annotator;
         var svg = null;
         if (page_annotator) {
-          svg = page_annotator.scope.project.exportSVG({
-            asString: true
-          });
+          svg = page_annotator.exportSVG();
         }
         result[pagenum - 1] = svg;
         remaining -= 1;
@@ -1358,6 +1795,32 @@ Annotator.prototype.exportSVG = function() {
       }.bind(this, i));
     }
   }.bind(this));
+};
+
+Annotator.prototype.exportTextAnnotations = function() {
+  var list = [];
+  each(this.annotators, function(page_annotator) {
+    each(page_annotator.textAnnotations, function(annotation) {
+      var scaleX = page_annotator.pagewidth / (annotation.circle.project.view.bounds.width * CSS_UNITS);
+      var scaleY = page_annotator.pageheight / (annotation.circle.project.view.bounds.height * CSS_UNITS);
+      var color = annotation.color;
+      if (color.length === 9 && color[0] === '#') {
+        // PDF annotations don't support transparency.
+        color = color.substr(0, 7);
+      }
+      var taObj = {
+        "page": page_annotator.pagenum - 1,
+        "x": annotation.circle.position.x * scaleX,
+        "y": annotation.circle.position.y * scaleY,
+        "author": annotation.author,
+        "modified": annotation.modified,
+        "text": annotation.content,
+        "color": color,
+      };
+      list.push(taObj);
+    });
+  });
+  return list;
 };
 
 Annotator.prototype.downloadPdf = function() {
@@ -1371,6 +1834,7 @@ Annotator.prototype.downloadPdf = function() {
     var data = {
       "svg": svg,
       "token": this.token,
+      "text": this.exportTextAnnotations(),
     };
 
     // Download code from https://stackoverflow.com/a/23797348

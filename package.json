@@ -14,6 +14,8 @@
 	"dependencies": {
 		"@jaames/iro": "5.5.2",
 		"jquery": "3.6.0",
+		"jquery-ui": "1.13.0",
+		"lodash": "4.17.21",
 		"paper": "0.12.15",
 		"pdfjs-dist": "2.12.313",
 		"pdfjs-dist-viewer-min": "2.12.313",
