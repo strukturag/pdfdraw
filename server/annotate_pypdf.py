@@ -66,7 +66,7 @@ def annotate(fp_in, annotations):
     y = annotation['y']
     if angle == 0:
       x = float(x)
-      y = size[3] - float(y) - 20
+      y = float(size[3]) - float(y) - 20
     elif angle == 90:
       x, y = float(y) - 2, float(x) - 15
     else:
