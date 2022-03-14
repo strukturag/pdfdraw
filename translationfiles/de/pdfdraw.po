@@ -4,16 +4,16 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Joachim Bauch <mail@joachim-bauch.de>, 2021
+# Joachim Bauch <mail@joachim-bauch.de>, 2022
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-12-08 14:42+0100\n"
+"POT-Creation-Date: 2022-03-14 09:47+0100\n"
 "PO-Revision-Date: 2021-12-07 15:44+0000\n"
-"Last-Translator: Joachim Bauch <mail@joachim-bauch.de>, 2021\n"
+"Last-Translator: Joachim Bauch <mail@joachim-bauch.de>, 2022\n"
 "Language-Team: German (https://www.transifex.com/strukturag/teams/115058/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -131,46 +131,50 @@ msgstr "Zusammengefügtes PDF wird erstellt, bitte warten..."
 msgid "PDF generation failed, please try again later."
 msgstr "PDF Erzeugung fehlgeschlagen, bitte versuchen Sie es später nochmal."
 
-#: templates/viewer.php:230 templates/viewer.php:232
+#: templates/viewer.php:233 templates/viewer.php:235
 msgid "Freehand"
 msgstr "Freihand"
 
-#: templates/viewer.php:235 templates/viewer.php:237
+#: templates/viewer.php:238 templates/viewer.php:240
 msgid "Rectangle"
 msgstr "Rechteck"
 
-#: templates/viewer.php:240 templates/viewer.php:242
+#: templates/viewer.php:243 templates/viewer.php:245
 msgid "Ellipse"
 msgstr "Ellipse"
 
-#: templates/viewer.php:245 templates/viewer.php:247
+#: templates/viewer.php:248 templates/viewer.php:250
 msgid "Line"
 msgstr "Linie"
 
-#: templates/viewer.php:297 templates/viewer.php:299
+#: templates/viewer.php:253 templates/viewer.php:255
+msgid "Comment"
+msgstr "Kommentar"
+
+#: templates/viewer.php:304 templates/viewer.php:306
 msgid "No tool"
 msgstr "Nichts wählen"
 
-#: templates/viewer.php:302 templates/viewer.php:304
+#: templates/viewer.php:309 templates/viewer.php:311
 msgid "Select"
 msgstr "Auswählen"
 
-#: templates/viewer.php:307 templates/viewer.php:309
+#: templates/viewer.php:314 templates/viewer.php:316
 msgid "Pointer"
 msgstr "Zeiger"
 
-#: templates/viewer.php:313 templates/viewer.php:315
+#: templates/viewer.php:320 templates/viewer.php:322
 msgid "Draw mode"
 msgstr "Zeichenmodus"
 
-#: templates/viewer.php:320 templates/viewer.php:322
+#: templates/viewer.php:327 templates/viewer.php:329
 msgid "Select color"
 msgstr "Farbe wählen"
 
-#: templates/viewer.php:325 templates/viewer.php:327
+#: templates/viewer.php:332 templates/viewer.php:334
 msgid "Download"
 msgstr "Herunterladen"
 
-#: templates/viewer.php:330 templates/viewer.php:332
+#: templates/viewer.php:337 templates/viewer.php:339
 msgid "Close"
 msgstr "Schließen"
