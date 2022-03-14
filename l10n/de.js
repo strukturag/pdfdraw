@@ -27,6 +27,7 @@ OC.L10N.register(
     "Rectangle" : "Rechteck",
     "Ellipse" : "Ellipse",
     "Line" : "Linie",
+    "Comment" : "Kommentar",
     "No tool" : "Nichts wählen",
     "Select" : "Auswählen",
     "Pointer" : "Zeiger",
