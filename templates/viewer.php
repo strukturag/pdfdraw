@@ -250,9 +250,9 @@ See https://github.com/adobe-type-tools/cmap-resources
                 <?php p($l->t('Line')) ?>
               </span>
             </button>
-            <button id="textAnnotation" class="modeButton toolbarButton textMode hiddenMediumView" title="<?php p($l->t('Text')) ?>" tabindex="34" data-l10n-id="text" data-mode="text">
+            <button id="textAnnotation" class="modeButton toolbarButton textMode hiddenMediumView" title="<?php p($l->t('Comment')) ?>" tabindex="34" data-l10n-id="text" data-mode="text">
                 <span data-l10n-id="text">
-                  <?php p($l->t('Text')) ?>
+                  <?php p($l->t('Comment')) ?>
                 </span>
             </button>
           </div>
