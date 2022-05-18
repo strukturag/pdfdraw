@@ -23,7 +23,7 @@
 		"url": "0.11.0"
 	},
 	"devDependencies": {
-		"copy-webpack-plugin": "10.2.4",
+		"copy-webpack-plugin": "11.0.0",
 		"eslint": "8.15.0",
 		"stylelint": "14.8.2",
 		"stylelint-config-standard-scss": "^3.0.0",
