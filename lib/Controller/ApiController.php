@@ -25,6 +25,7 @@ namespace OCA\Pdfdraw\Controller;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use \Firebase\JWT\JWT;
+use \Firebase\JWT\Key;
 use OC\Files\Filesystem;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataDownloadResponse;
@@ -100,7 +101,8 @@ class ApiController extends OCSController {
 		}
 
 		try {
-			$decoded = JWT::decode($token, $secret, array('HS256'));
+			$key = new Key($secret, 'HS256');
+			$decoded = JWT::decode($token, $key);
 		} catch (\Exception $e) {
 			return null;
 		}

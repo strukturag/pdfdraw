@@ -24,6 +24,7 @@ declare(strict_types=1);
 namespace OCA\Pdfdraw\Controller;
 
 use \Firebase\JWT\JWT;
+use \Firebase\JWT\Key;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
@@ -259,7 +260,7 @@ class ViewerController extends Controller {
 			'fileId' => $fileId,
 			'token' => $token,
 		];
-		$jwt = JWT::encode($data, $secret);
+		$jwt = JWT::encode($data, $secret, 'HS256');
 
 		$fileUrl = $this->urlGenerator->linkToRouteAbsolute($this->appName . ".viewer.downloadFile", ["token" => $jwt]);
 
@@ -404,7 +405,7 @@ class ViewerController extends Controller {
 				'displayname' => $displayName,
 				'permissions' => $permissions,
 			];
-			$jwt = JWT::encode($token, $secret);
+			$jwt = JWT::encode($token, $secret, 'HS256');
 		}
 		$params = [
 			'urlGenerator' => $this->urlGenerator,
@@ -447,7 +448,8 @@ class ViewerController extends Controller {
 	public function downloadFile(string $token) {
 		$secret = $this->getDownloadSecret();
 		try {
-			$data = JWT::decode($token, $secret, ['HS256']);
+			$key = new Key($secret, 'HS256');
+			$data = JWT::decode($token, $key);
 		} catch (\Exception $e) {
 			$this->logger->logException($e, [
 				'message' => 'download: ' . $token,

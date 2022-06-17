@@ -41,9 +41,18 @@ if (class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
     return new Capabilities();
 });
 
-if (!class_exists('\\Firebase\\JWT\\JWT')) {
+if (!class_exists('\\Firebase\\JWT\\BeforeValidException')) {
 	require_once __DIR__ . "/../3rdparty/php-jwt/src/BeforeValidException.php";
+}
+if (!class_exists('\\Firebase\\JWT\\ExpiredException')) {
 	require_once __DIR__ . "/../3rdparty/php-jwt/src/ExpiredException.php";
+}
+if (!class_exists('\\Firebase\\JWT\\SignatureInvalidException')) {
 	require_once __DIR__ . "/../3rdparty/php-jwt/src/SignatureInvalidException.php";
-	require_once __DIR__ . "/../3rdparty/php-jwt/src/JWT.php";
+}
+if (!class_exists('\\Firebase\\JWT\\JWT')) {
+		require_once __DIR__ . "/../3rdparty/php-jwt/src/JWT.php";
+}
+if (!class_exists('\\Firebase\\JWT\\Key')) {
+	require_once __DIR__ . "/../3rdparty/php-jwt/src/Key.php";
 }
