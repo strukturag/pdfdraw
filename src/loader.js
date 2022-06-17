@@ -87,6 +87,14 @@ if (OCA.FilesPdfViewer && OCA.FilesPdfViewer.PreviewPlugin) {
   };
 }
 
+document.addEventListener("webviewerloaded", function(event) {
+  var locale = OC.getLocale();
+  if (locale && event.detail && event.detail.source && event.detail.source.PDFViewerApplicationOptions) {
+    var PDFViewerApplicationOptions = event.detail.source.PDFViewerApplicationOptions;
+    PDFViewerApplicationOptions.set('locale', locale.replace('_', '-'));
+  }
+});
+
 $(document).ready(function() {
   if (OCA.Sharing && OCA.Sharing.PublicApp) {
     var mimetype = $("#mimetype");
