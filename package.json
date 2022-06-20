@@ -24,7 +24,7 @@
 	},
 	"devDependencies": {
 		"copy-webpack-plugin": "11.0.0",
-		"eslint": "8.17.0",
+		"eslint": "8.18.0",
 		"stylelint": "14.9.1",
 		"stylelint-config-standard-scss": "^4.0.0",
 		"webpack": "5.73.0",
