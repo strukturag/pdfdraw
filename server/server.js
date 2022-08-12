@@ -914,7 +914,8 @@ var server = http.createServer(function(request, response) {
 var io = socketio(server, {
   'cors': {
     'origin': '*:*',
-  }
+  },
+  'allowEIO3': true
 });
 
 io.on('connection', function(socket) {
