@@ -913,7 +913,7 @@ var server = http.createServer(function(request, response) {
 
 var io = socketio(server, {
   'cors': {
-    'origin': '*:*',
+    'origin': '*',
   },
   'allowEIO3': true
 });
