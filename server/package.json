@@ -10,6 +10,6 @@
   "main": "server.js",
   "dependencies": {
     "jsonwebtoken": "^8.4.0",
-    "socket.io": "^4.5.3"
+    "socket.io": "^4.5.4"
   }
 }
