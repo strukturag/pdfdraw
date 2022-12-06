@@ -28,6 +28,6 @@
 		"stylelint": "14.16.0",
 		"stylelint-config-standard-scss": "^6.1.0",
 		"webpack": "5.75.0",
-		"webpack-cli": "5.0.0"
+		"webpack-cli": "5.0.1"
 	}
 }
