@@ -24,8 +24,8 @@ declare(strict_types=1);
 namespace OCA\Pdfdraw\Controller;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use \Firebase\JWT\JWT;
-use \Firebase\JWT\Key;
+use OCA\Pdfdraw\Vendor\Firebase\JWT\JWT;
+use OCA\Pdfdraw\Vendor\Firebase\JWT\Key;
 use OC\Files\Filesystem;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataDownloadResponse;

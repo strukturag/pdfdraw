@@ -56,6 +56,8 @@ appstore: clean build
 	mkdir -p $(sign_dir)
 	rsync -a \
 	--exclude=/build \
+	--exclude=composer.json \
+	--exclude=composer.lock \
 	--exclude=.eslintignore \
 	--exclude=.eslintrc.yml \
 	--exclude=.git \
@@ -64,10 +66,18 @@ appstore: clean build
 	--exclude=.gitmodules \
 	--exclude=Makefile \
 	--exclude=node_modules \
+	--exclude=package.json \
+	--exclude=package-lock.json \
 	--exclude=src \
 	--exclude=run-*lint.sh \
 	--exclude=.stylelintrc \
+	--exclude=.tx \
+	--exclude=.l10nignore \
+	--exclude=translationfiles \
 	--exclude=vendors*js \
+	--exclude=vendor \
+	--exclude=vendor-bin \
+	--exclude=webpack.js \
 	$(project_dir)/ \
 	$(sign_dir)/$(app_name)
 	@if [ -f $(cert_dir)/$(app_name).key ]; then \

@@ -23,8 +23,8 @@ declare(strict_types=1);
 
 namespace OCA\Pdfdraw\Controller;
 
-use \Firebase\JWT\JWT;
-use \Firebase\JWT\Key;
+use OCA\Pdfdraw\Vendor\Firebase\JWT\JWT;
+use OCA\Pdfdraw\Vendor\Firebase\JWT\Key;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
