@@ -2,6 +2,10 @@
 3rdparty/pdfjs/
 build/
 js/
+lib/Vendor/
+vendor/
+
+composer.phar
 server/config.js
 server/docker-compose.yml
 translationtool.phar
