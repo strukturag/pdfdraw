@@ -40,6 +40,3 @@ if (class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 \OC::$server->getCapabilitiesManager()->registerCapability(function() {
     return new Capabilities();
 });
-
-// Register the composer autoloader for packages shipped by this app
-include_once __DIR__ . '/../lib/vendor/autoload.php';
