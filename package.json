@@ -19,7 +19,7 @@
 		"paper": "0.12.17",
 		"pdfjs-dist": "2.12.313",
 		"pdfjs-dist-viewer-min": "2.12.313",
-		"socket.io-client": "4.6.1",
+		"socket.io-client": "4.6.2",
 		"url": "0.11.0"
 	},
 	"devDependencies": {
