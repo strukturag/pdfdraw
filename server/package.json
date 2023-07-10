@@ -9,7 +9,7 @@
   },
   "main": "server.js",
   "dependencies": {
-    "jsonwebtoken": "^9.0.0",
+    "jsonwebtoken": "^9.0.1",
     "socket.io": "^4.6.1"
   }
 }
