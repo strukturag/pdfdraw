@@ -2,7 +2,7 @@
   /** @var array $_ */
   /** @var OCP\IURLGenerator $urlGenerator */
   $urlGenerator = $_['urlGenerator'];
-  $version = \OCP\App::getAppVersion('pdfdraw');
+  $version = \OC::$server->getAppManager()->getAppVersion('pdfdraw');
 ?>
 <!DOCTYPE html>
 <!--
