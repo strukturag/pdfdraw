@@ -27,7 +27,7 @@
 		"eslint": "8.49.0",
 		"stylelint": "15.10.1",
 		"stylelint-config-standard-scss": "10.0.0",
-		"webpack": "5.88.1",
+		"webpack": "5.88.2",
 		"webpack-cli": "5.1.4"
 	}
 }
