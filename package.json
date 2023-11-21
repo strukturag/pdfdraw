@@ -17,7 +17,7 @@
 		"jquery-ui": "1.13.2",
 		"lodash": "4.17.21",
 		"paper": "0.12.17",
-		"pdfjs-dist": "2.12.313",
+		"pdfjs-dist": "4.0.189",
 		"pdfjs-dist-viewer-min": "2.12.313",
 		"socket.io-client": "4.6.1",
 		"url": "0.11.3"
