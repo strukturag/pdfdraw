@@ -1,0 +1,181 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Nextcloud package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Ali <alimahwer@yahoo.com>, 2024
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Nextcloud 3.14159\n"
+"Report-Msgid-Bugs-To: translations\\@example.com\n"
+"POT-Creation-Date: 2022-03-14 09:47+0100\n"
+"PO-Revision-Date: 2021-12-07 15:44+0000\n"
+"Last-Translator: Ali <alimahwer@yahoo.com>, 2024\n"
+"Language-Team: Arabic (https://app.transifex.com/strukturag/teams/115058/ar/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: lib/Controller/ViewerController.php:151
+msgid "FileId is empty."
+msgstr "الملف فارغ"
+
+#: lib/Controller/ViewerController.php:162
+#: lib/Controller/ViewerController.php:213
+#: lib/Controller/ViewerController.php:219
+msgid "File not found."
+msgstr "الملف غير موجود"
+
+#: lib/Controller/ViewerController.php:167
+#: lib/Controller/ViewerController.php:186
+#: lib/Controller/ViewerController.php:192
+#: lib/Controller/ViewerController.php:206
+msgid "You do not have enough permissions to view the file."
+msgstr "ليس لديك الأذونات الكافية لعرض الملف."
+
+#: lib/Controller/ViewerController.php:174
+msgid "Token is empty."
+msgstr "الأَمَارَة token فارغة"
+
+#: lib/Controller/ViewerController.php:275
+#, php-format
+msgid "File %s is not a PDF file (%s)."
+msgstr "الملف %s ليس ملف \"بي دي إف\" (%s)."
+
+#: lib/Controller/ViewerController.php:312
+msgid "No backend configured."
+msgstr "لم يتم تكوين أي واجهة خلفية."
+
+#: lib/Controller/ViewerController.php:456
+msgid "Invalid token."
+msgstr "أَمَارَة token غير صحيحة."
+
+#: lib/Controller/ViewerController.php:473
+msgid "Access denied."
+msgstr "غير مسموح بالدخول."
+
+#: lib/Settings/Admin/Section.php:77
+#: specialAppInfoFakeDummyForL10nScript.php:2
+#: templates/settings/admin/backend.php:9
+msgid "PDF Annotations"
+msgstr "تعليقات الـ\"بي دي إف\""
+
+#: specialAppInfoFakeDummyForL10nScript.php:3
+msgid "Annotate PDF documents"
+msgstr "التعليق على مستندات الـ\"بي دي إف\""
+
+#: specialAppInfoFakeDummyForL10nScript.php:4
+msgid ""
+"PDF annotations for Nextcloud\n"
+"\n"
+"Annotate any PDF document collaboratively inside Nextcloud. Select \"Annotate\" from the context menu of PDF files to open the annotation mode.\n"
+"\n"
+"Requires a separate nodejs server running on the backend to distribute the signaling messages between clients.\n"
+"The server is available on [GitHub](https://github.com/strukturag/pdfdraw/tree/master/server)."
+msgstr ""
+"التعليق على ملفات الـ\"بي دي إف\" في نكست كلاود.\n"
+"\n"
+"يمكنك التعليق على أي مستند PDF بشكل تعاوني داخل نكست كلاود. إختر \"تعليق\" من قائمة السياق لملفات PDF لفتح وضعية التعليق. \n"
+"\n"
+"يتطلب هذا التطبيق خادوم Nodejs منفصلًا يعمل على الواجهة الخلفية لتوزيع رسائل الإشارة بين العملاء. \n"
+"الخادوم متاح على [GitHub](https://github.com/strukturag/pdfdraw/tree/master/server)."
+
+#: src/loader.js:42 src/loader.js:96
+msgid "Annotate"
+msgstr "تعليق"
+
+#: src/loader.js:105
+msgid "Open"
+msgstr "فتح"
+
+#: templates/settings/admin/backend.php:11
+#: templates/settings/admin/backend.php:13
+msgid "Backend server"
+msgstr "خادوم الواجهة الخلفية"
+
+#: templates/settings/admin/backend.php:13
+msgid "https://server.domain.invalid/path/"
+msgstr "https://server.domain.invalid/path/"
+
+#: templates/settings/admin/backend.php:14
+#: templates/settings/admin/backend.php:20
+msgid "Saved"
+msgstr "تمّ الحفظ"
+
+#: templates/settings/admin/backend.php:17
+#: templates/settings/admin/backend.php:19
+msgid "Shared secret"
+msgstr "السّر المشترك"
+
+#: templates/viewer.php:54
+msgid "Stroke width"
+msgstr "عرض الشطبة"
+
+#: templates/viewer.php:61
+msgid "Establishing connection, please wait..."
+msgstr "جارٍ تأسيس الاتصال. يُرجى الانتظار..."
+
+#: templates/viewer.php:64
+msgid "The connection is interrupted, reconnecting..."
+msgstr "انقطع الاتصال. جارٍ إعادة الاتصال ..."
+
+#: templates/viewer.php:67
+msgid "Generating combined PDF, please wait..."
+msgstr "جارٍ تكوين ملف \"بي دي إف\". يُرجى الانتظار ..."
+
+#: templates/viewer.php:70
+msgid "PDF generation failed, please try again later."
+msgstr "تعذّر تكوين ملف \"بي دي إف\". يرجى المحاولة مرة أخرى. "
+
+#: templates/viewer.php:233 templates/viewer.php:235
+msgid "Freehand"
+msgstr "خط حر"
+
+#: templates/viewer.php:238 templates/viewer.php:240
+msgid "Rectangle"
+msgstr "مستطيل"
+
+#: templates/viewer.php:243 templates/viewer.php:245
+msgid "Ellipse"
+msgstr "شكل بيضاوي"
+
+#: templates/viewer.php:248 templates/viewer.php:250
+msgid "Line"
+msgstr "مستقيم"
+
+#: templates/viewer.php:253 templates/viewer.php:255
+msgid "Comment"
+msgstr "ملاحظة"
+
+#: templates/viewer.php:304 templates/viewer.php:306
+msgid "No tool"
+msgstr "لا أدوات"
+
+#: templates/viewer.php:309 templates/viewer.php:311
+msgid "Select"
+msgstr "إختَر"
+
+#: templates/viewer.php:314 templates/viewer.php:316
+msgid "Pointer"
+msgstr "مُؤشِّر"
+
+#: templates/viewer.php:320 templates/viewer.php:322
+msgid "Draw mode"
+msgstr "وضعية الرسم"
+
+#: templates/viewer.php:327 templates/viewer.php:329
+msgid "Select color"
+msgstr "إختَر اللون"
+
+#: templates/viewer.php:332 templates/viewer.php:334
+msgid "Download"
+msgstr "تنزيل"
+
+#: templates/viewer.php:337 templates/viewer.php:339
+msgid "Close"
+msgstr "غلق"
